@@ -1,21 +1,21 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
-:root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+@source "./index.html";
+@source "./src/**/*.{js,ts,jsx,tsx}";
 
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
 
-body {
+html, body, #root {
+  height: 100%;
+  width: 100%;
   margin: 0;
-  display: flex;
-  place-items: center;
 }
 
+/* 이 라인들 때문에 높이가 줄어드는 경우가 많습니다. 제거 또는 무력화 */
+body {
+  /* display: flex; */
+  /* place-items: center; */
+  display: block; /* 안전하게 고정 */
+}
+
+/* 스크롤바 포함 100vw 문제 예방(가로 스크롤 방지) */
+:root { overflow-x: hidden; }

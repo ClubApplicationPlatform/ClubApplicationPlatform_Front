@@ -48,16 +48,14 @@ export default function JoinUsClubsPage() {
 
   return (
     <div
-      className={`${themeDark ? "bg-gray-950" : "bg-gray-50"} h-[100vh] w-[100vw] bg-cover bg-center bg-no-repeat flex items-center justify-center relative`}
       style={{ backgroundImage: "url('/assets/JoinUs_Background.png')" }}
+      className="w-full min-h-[100vh] md:min-h-dvh bg-cover bg-center bg-no-repeat flex items-center justify-center relative"
     >
-      <div className={`${themeDark ? "bg-[white]" : "bg-[white]"} h-[85vh] w-[85vw] flex items-center justify-center rounded-[10px] shadow-[0_10px_30px_rgba(0,0,0,0.5)]`}>
-        <div className="mx-auto max-w-6xl px-6 pb-16 pt-8">
-          {/* <header className="mb-8 flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-600 text-white">
-                <span className="text-xl font-black">U</span>
-              </div>
+      <div className={`${themeDark ? "bg-gray-800" : "bg-white"} flex-col w-[80vw] h-[85vh] flex items-center justify-center rounded-2xl shadow-lg `}>
+        <div className="mx-auto max-w-6xl px-6 pb-16 pt-8 h-[100%] w-[100%]">
+          <header className="mb-8 flex items-center justify-between">
+            <div className="flex items-center gap-2">
+            <img src="/assets/JoinUs_Logo.png" className="w-[48px] h-[48px]" />
               <div>
                 <div className={`text-2xl font-extrabold ${themeDark ? "text-white" : "text-gray-900"}`}>JoinUs</div>
                 <div className="text-xs text-gray-500">연암공과대학교</div>
@@ -67,58 +65,13 @@ export default function JoinUsClubsPage() {
             <div className="flex items-center gap-4">
               <Toggle checked={themeDark} onChange={setThemeDark} />
               <button type="button" className={`rounded-full p-2 ${themeDark ? "text-gray-300 hover:bg-gray-800" : "text-gray-600 hover:bg-gray-100"}`} aria-label="settings">
-                <GearIcon />
               </button>
               <div className={`flex h-9 w-9 items-center justify-center rounded-full ${themeDark ? "bg-gray-800 text-gray-200" : "bg-gray-200 text-gray-700"}`} aria-hidden>
-                <UserIcon />
               </div>
             </div>
           </header>
 
-          <div className="mb-6 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
-            <div className="flex gap-2">
-              {(["전공 동아리", "일반 동아리"] as const).map((tab) => (
-                <button
-                  key={tab}
-                  type="button"
-                  onClick={() => setActiveTab(tab)}
-                  className={`rounded-xl px-4 py-2 text-sm font-semibold transition ${
-                    activeTab === tab
-                      ? "bg-blue-600 text-white shadow-sm"
-                      : themeDark
-                      ? "bg-gray-800 text-gray-200 ring-1 ring-gray-700"
-                      : "bg-white text-gray-700 ring-1 ring-gray-200 hover:bg-gray-50"
-                  }`}
-                  aria-pressed={activeTab === tab}
-                >
-                  {tab}
-                </button>
-              ))}
-            </div>
-
-            <label htmlFor={searchId} className="sr-only">동아리 검색</label>
-            <div className={`flex w-full max-w-sm items-center gap-2 rounded-xl px-3 py-2 ring-1 sm:w-80 ${themeDark ? "bg-gray-900 ring-gray-800 text-gray-200" : "bg-white ring-gray-200 text-gray-700"}`}>
-              <SearchIcon />
-              <input
-                id={searchId}
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                placeholder="동아리를 검색해보세요..."
-                className={`h-7 w-full bg-transparent text-sm outline-none placeholder:text-gray-400 ${themeDark ? "text-gray-100" : "text-gray-900"}`}
-              />
-            </div>
-          </div>
-
-          <section className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {filtered.map((club) => (
-              <ClubCard key={club.id} club={club} />
-            ))}
-            {filtered.length === 0 && (
-              <div className={`col-span-full rounded-2xl p-10 text-center ${themeDark ? "bg-gray-900 text-gray-300" : "bg-white text-gray-500"}`}>
-                검색 결과가 없습니다.
-              </div>
-            )}
-          </section> */}
+          
         </div>
       </div>
     </div>
