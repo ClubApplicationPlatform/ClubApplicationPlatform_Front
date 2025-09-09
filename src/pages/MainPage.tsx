@@ -1,8 +1,5 @@
 import  { useId, useMemo, useState } from "react";
 import type { Club,Category } from "../types/club";
-import SearchIcon from "../components/ui/SearchIcon";
-import GearIcon from "../components/ui/GearIcon";
-import UserIcon from "../components/ui/UserIcon";
 import ClubCard from "../components/form/ClubCard";
 
 // ── Mock Data ──────────────────────────────────────────────────────
@@ -26,6 +23,7 @@ export default function JoinUsClubsPage() {
     const base = CLUBS.filter((c) => c.category === activeTab);
     if (!query.trim()) return base;
     const q = query.trim().toLowerCase();
+    
     return base.filter((c) => c.name.toLowerCase().includes(q) || c.summary.toLowerCase().includes(q));
   }, [activeTab, query]);
 
@@ -35,8 +33,8 @@ export default function JoinUsClubsPage() {
       className="w-full min-h-[100vh] md:min-h-dvh bg-cover bg-center bg-no-repeat flex items-center justify-center relative"
     >
       <div className="bg-white flex-col w-[90vw] h-[90vh] flex items-center justify-center rounded-2xl shadow-lg ">
-        <div className="mx-auto max-w-6xl px-6 pb-16 pt-8 h-[100%] w-[100%]">
-          <header className="mb-8 flex items-center justify-between">
+        <div className="mx-auto max-w-6xl h-[90%] w-[100%]">
+          <header className="ml-8 mr-3 mb-8 flex items-center justify-between">
             <div className="flex items-center gap-2">
             <img src="/assets/JoinUs_Logo.png" className="w-[48px] h-[48px] ml-5"/>
               <div>
@@ -48,15 +46,28 @@ export default function JoinUsClubsPage() {
             <img src="/assets/UserProfile.png" className="w-[48px] h-[48px] mr-8"/>
           </header>
 
-          <main className="flex flex-col items-center justify-center w-full h-[95%] bg-red-100">
+          <main className="flex flex-col items-center justify-center w- h-[95%] bg-[#F]">
 
-            <section className="flex flex-row items-center justify-between bg-blue-300 w-[100%] h-[90px] ">
-              <div className="flex flex-row">
-                <div className="w-[100px] h-[60px] bg-red-200 flex items-center justify-center">
-                  전공 동아리
-                </div>
-                <div className="w-[100px] h-[60px] bg-red-200 flex items-center justify-center">
-                  일반 동아리
+            <section className="flex flex-row items-center justify-between  w-[100%] h-[90px] ">
+              <div className="flex flex-row ml-4 justify-between w-[220px]">
+                <div className="p-6 max-w-md mx-auto">
+                  <div className="flex space-x-2 mb-4 ">
+                    {(["전공 동아리", "일반 동아리"] as Category[]).map(
+                      (tab) => (
+                        <button
+                          key={tab}
+                          onClick={() => setActiveTab(tab)}
+                          className={`px-4 py-2 rounded-[8px] text-[14px] w-[110px] cursor-pointer ${
+                            activeTab === tab
+                              ? "bg-[#054FCC] text-white"
+                              : "bg-[#EFEFEF]"
+                          }`}
+                        >
+                          {tab}
+                        </button>
+                      )
+                    )}
+                  </div>
                 </div>
               </div>
 
@@ -69,7 +80,9 @@ export default function JoinUsClubsPage() {
                 <img src="/assets/SearchIcon.png" className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 h-5 w-5 opacity-60"/>
               </div>
             </section>
-            <section className="flex items-center justify-center bg-gray-500 w-[100%] h-[85%]">
+
+
+            <section className="flex items-center justify-center w-[100%] h-[85%]">
 
             </section>
 
