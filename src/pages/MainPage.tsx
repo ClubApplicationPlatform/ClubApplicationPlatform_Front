@@ -46,7 +46,7 @@ export default function JoinUsClubsPage() {
             <img src="/assets/UserProfile.png" className="w-[48px] h-[48px] mr-8"/>
           </header>
 
-          <main className="flex flex-col items-center justify-center w- h-[95%] bg-[#F]">
+          <main className="flex flex-col items-center justify-center w- h-[95%] bg-[#F5FDFF]">
 
             <section className="flex flex-row items-center justify-between  w-[100%] h-[90px] ">
               <div className="flex flex-row ml-4 justify-between w-[220px]">
@@ -82,8 +82,12 @@ export default function JoinUsClubsPage() {
             </section>
 
 
-            <section className="flex items-center justify-center w-[100%] h-[85%]">
-
+            <section className="h-[70vh] overflow-y auto">
+                <div className="grid grid-cols-4 gap-7">
+                  {CLUBS.map((club) => (
+                    <ClubCard key={club.id} club={club} />
+                  ))}
+                </div>
             </section>
 
           </main>
