@@ -7,6 +7,14 @@ function App() {
   return (
     <>
       <MainPage />
+      <MainPage />
+      <MainPage />
+      <MainPage />
+      <MainPage />
+      <MainPage />
+      <MainPage />
+      <MainPage />
+      <MainPage />
     </>
   )
 }
