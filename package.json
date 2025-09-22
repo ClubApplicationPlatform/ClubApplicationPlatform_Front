@@ -29,10 +29,10 @@
                         // 충돌을 위한 코드
                           // 충돌을 위한 코드
                             // 충돌을 위한 코드
-                            
+
   "devDependencies": {
     "@eslint/js": "^9.25.0",
-    "@tailwindcss/postcss": "^4.1.12",
+    "@tailwindcss/postcss": "^4.0.12",
     "@types/react": "^19.1.4",
     "@types/react-dom": "^19.1.5",
     "@types/react-router-dom": "^5.3.3",
