@@ -11,3 +11,4 @@ export interface Club {
   members: number;
   updated: string; // YYYY.MM.DD
 };
+
