@@ -53,7 +53,7 @@ export default function ClubDetailPageHero({ club }: ClubHeroProps) {
         <div className="mb-6 flex gap-2 border-b">
           <button
             onClick={() => handleTabChange("about")}
-            className={`px-4 py-2 text-center transition-all ${
+            className={`px-4 py-2 text-center transition-all hover:cursor-pointer ${
               activeTab === "about"
                 ? "border-b-2 border-blue-600 text-blue-600"
                 : "text-gray-600 hover:text-gray-900"
@@ -63,7 +63,7 @@ export default function ClubDetailPageHero({ club }: ClubHeroProps) {
           </button>
           <button
             onClick={() => handleTabChange("notices")}
-            className={`px-4 py-2 text-center transition-all ${
+            className={`px-4 py-2 text-center transition-all hover:cursor-pointer ${
               activeTab === "notices"
                 ? "border-b-2 border-blue-600 text-blue-600"
                 : "text-gray-600 hover:text-gray-900"
@@ -73,7 +73,7 @@ export default function ClubDetailPageHero({ club }: ClubHeroProps) {
           </button>
           <button
             onClick={() => handleTabChange("activities")}
-            className={`px-4 py-2 text-center transition-all ${
+            className={`px-4 py-2 text-center transition-all hover:cursor-pointer ${
               activeTab === "activities"
                 ? "border-b-2 border-blue-600 text-blue-600"
                 : "text-gray-600 hover:text-gray-900"
