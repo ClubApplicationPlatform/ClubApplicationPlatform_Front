@@ -302,7 +302,7 @@ export function ClubDetailPage({ user }: ClubDetailPageProps) {
                     </motion.div>
                   )}
 
-                  {activeTab === "acitivities" && (
+                  {activeTab === "activities" && (
                     <motion.div
                       key="activities"
                       custom={direction}
@@ -340,7 +340,7 @@ export function ClubDetailPage({ user }: ClubDetailPageProps) {
           </motion.div>
 
           {/* Sidebar */}
-          <div className="space-y-6">
+          <div className="space-y-6 mt-17">
             <Card>
               <CardHeader>
                 <CardTitle>모집정보</CardTitle>
