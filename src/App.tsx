@@ -4,6 +4,7 @@ import { useState } from "react";
 import { ClubListPage } from "./pages/club/ClubListPage";
 import { Header } from "./components/Header";
 import { LoginPage } from "./components/auth/LoginPage";
+import { SignupPage } from "./components/auth/SignupPage";
 import {
   BrowserRouter as Router,
   Routes,
@@ -25,6 +26,7 @@ function App() {
             element={<Navigate to="/clubs" replace />}
           />
           <Route path="/clubs" element={<ClubListPage user={user} />} />
+          <Route path="/signup" element={<SignupPage setUser={setUser} />} />
           <Route
             path="/clubs/:clubId"
             element={<ClubDetailPage user={user} />}
