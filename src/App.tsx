@@ -2,6 +2,7 @@ import "./index.css";
 import "./App.css";
 import { useState } from "react";
 import { ClubListPage } from "./pages/club/ClubListPage";
+import { Header } from "./components/Header";
 import {
   BrowserRouter as Router,
   Routes,
@@ -15,6 +16,7 @@ function App() {
   return (
     <Router>
       <div className="min-h-screen bg-gray-50">
+        <Header user={user} setUser={setUser} />
         <Routes>
           <Route path="/" element={<Navigate to="/clubs" replace />} />
           <Route
