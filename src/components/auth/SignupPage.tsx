@@ -232,7 +232,7 @@ export function SignupPage({ setUser }: SignupPageProps) {
         <CardHeader>
           <CardTitle>회원가입</CardTitle>
           <CardDescription>
-            ClubHub에 가입하여 동아리를 탐색해보세요
+            JoinUs에 가입하여 동아리를 탐색해보세요
           </CardDescription>
         </CardHeader>
         <CardContent>
