@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { Button } from "../../ui/button";
 import { Badge } from "../../ui/badge";
-import { Card, CardContent, CardHeader, CardTitle } from "../../ui/card";
-import { Heart, Users, Calendar, Settings } from "lucide-react";
+import { Card, CardContent } from "../../ui/card";
+import { Heart, Settings } from "lucide-react";
 import { mockClubs } from "../../lib/mockData";
 import { toast } from "sonner";
 import ClubDetailPageSideBar from "../../components/club/ClubDetailPageSideBar";
@@ -20,8 +20,6 @@ export function ClubDetailPage({ user }: ClubDetailPageProps) {
   const [isWishlisted, setIsWishlisted] = useState(false);
 
   const club = mockClubs.find((c) => c.id === clubId);
-
-  console.log(club);
 
   if (!club) {
     return (
