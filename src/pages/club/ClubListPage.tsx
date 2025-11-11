@@ -62,7 +62,7 @@ export function ClubListPage({ user }: ClubListPageProps) {
     <AnimatePresence mode="popLayout">
       <motion.div
         key={`${selectedType}-${selectedDepartment}-${recruitStatus}-${searchQuery}`}
-        className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3"
+        className="grid gap-6 grid-cols-[repeat(auto-fit,minmax(260px,1fr))]"
         initial="hidden"
         animate="visible"
         variants={{
@@ -164,7 +164,7 @@ export function ClubListPage({ user }: ClubListPageProps) {
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
       <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white">
-        <div className="container mx-auto px-4 py-16">
+        <div className="container mx-auto px-4 py-8">
           <h1 className="mb-4">우리 학교의 모든 동아리</h1>
           <p className="mb-8 text-blue-50">
             관심있는 동아리를 찾아 지원해보세요

@@ -3,19 +3,18 @@
 @source "./index.html";
 @source "./src/**/*.{js,ts,jsx,tsx}";
 
-
-html, body, #root {
+html,
+body,
+#root {
   height: 100%;
   width: 100%;
   margin: 0;
 }
 
-/* 이 라인들 때문에 높이가 줄어드는 경우가 많습니다. 제거 또는 무력화 */
 body {
-  /* display: flex; */
-  /* place-items: center; */
-  display: block; /* 안전하게 고정 */
+  display: block;
 }
 
-/* 스크롤바 포함 100vw 문제 예방(가로 스크롤 방지) */
-:root { overflow-x: hidden; }
+:root {
+  overflow-x: hidden;
+}
