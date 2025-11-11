@@ -84,7 +84,7 @@ export function ClubDetailPage({ user }: ClubDetailPageProps) {
     opacity: { duration: 0.15 },
   };
 
-  const fallbackImg = "/default-club.jpg"; // 필요 시 public 폴더에 기본 이미지 추가
+  const fallbackImg = "/default-club.jpg";
 
   return (
     <motion.div
@@ -167,7 +167,7 @@ export function ClubDetailPage({ user }: ClubDetailPageProps) {
       </motion.div>
 
       <div className="container mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
+        <div className="grid gap-6 grid-cols-[repeat(auto-fit,minmax(260px,1fr))]">
           <motion.div
             className="lg:col-span-2"
             initial={{ x: -20, opacity: 0 }}
@@ -343,36 +343,43 @@ export function ClubDetailPage({ user }: ClubDetailPageProps) {
           <div className="space-y-6">
             <Card>
               <CardHeader>
-                <CardTitle>추천 동아리</CardTitle>
+                <CardTitle>모집정보</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                {mockClubs
-                  .filter(
-                    (c) => c.id !== clubId && c.category === club.category
-                  )
-                  .slice(0, 2)
-                  .map((relatedClub) => (
-                    <div
-                      key={relatedClub.id}
-                      className="cursor-pointer space-y-2 border-b pb-4 last:border-0"
-                      onClick={() => navigate(`/clubs/${relatedClub.id}`)}
-                    >
-                      <div className="aspect-video overflow-hidden rounded-lg bg-gray-100">
-                        <img
-                          src={relatedClub.imageUrl}
-                          alt={relatedClub.name}
-                          onError={(e) =>
-                            ((e.target as HTMLImageElement).src = fallbackImg)
-                          }
-                          className="h-full w-full object-cover"
-                        />
-                      </div>
-                      <p className="line-clamp-1">{relatedClub.name}</p>
-                      <p className="line-clamp-2 text-sm text-gray-600">
-                        {relatedClub.shortDescription}
-                      </p>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-gray-600">모집 상태</span>
+                  <Badge
+                    className={
+                      club.isRecruiting ? "bg-green-600" : "bg-gray-400"
+                    }
+                  >
+                    {club.isRecruiting ? "모집중" : "모집 마감"}
+                  </Badge>
+                </div>
+
+                {club.isRecruiting && club.recruitDeadline && (
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-gray-600">모집 마감</span>
+                    <div className="flex items-center gap-1 text-sm">
+                      <Calendar className="h-4 w-4" />
+                      <span>{club.recruitDeadline}</span>
                     </div>
-                  ))}
+                  </div>
+                )}
+
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-gray-600">회원 수</span>
+                  <div className="flex items-center gap-1 text-sm">
+                    <Users className="h-4 w-4" />
+                    <span>{club.members}명</span>
+                  </div>
+                </div>
+
+                {club.isRecruiting && (
+                  <Button onClick={handleApply} className="w-full">
+                    지원하기
+                  </Button>
+                )}
               </CardContent>
             </Card>
           </div>
