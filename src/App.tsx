@@ -8,6 +8,7 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
+import { ClubDetailPage } from "./pages/club/ClubDetailPage";
 
 function App() {
   const [user, setUser] = useState<any>(null);
@@ -21,6 +22,10 @@ function App() {
             element={<Navigate to="/clubs" replace />}
           />
           <Route path="/clubs" element={<ClubListPage user={user} />} />
+          <Route
+            path="/clubs/:clubId"
+            element={<ClubDetailPage user={user} />}
+          />
 
           <Route path="*" element={<Navigate to="/clubs" replace />} />
         </Routes>
