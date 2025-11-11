@@ -6,12 +6,13 @@ import Badge from "./BadgeFrom";
 const toDateAttr = (s: string) => s.replace(/\./g, "-");
 
 function ClubCard({ club }: { club: Club }) {
+  console.log(club);
+
+
   return (
     <article className="group overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-gray-200 transition hover:shadow-md">
-      {/* thumbnail */}
-      <div className="h-36 w-full bg-gray-200" />
+      <div className="h-22 w-full bg-gray-200" />
 
-      {/* body */}
       <div className="space-y-2 p-4">
         <h3 className="text-lg font-semibold text-gray-900">{club.name}</h3>
         <p className="text-sm text-gray-500">{club.summary}</p>

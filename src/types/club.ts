@@ -9,5 +9,5 @@ export interface Club {
   summary: string;
   status: ClubStatus;
   members: number;
-  updated: string; // YYYY.MM.DD
+  updated: string;
 };
