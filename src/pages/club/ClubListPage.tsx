@@ -86,15 +86,15 @@ export function ClubListPage({ user }: ClubListPageProps) {
           className="mb-8"
         >
           <TabsList className="grid w-full max-w-md grid-cols-3">
-            <TabsTrigger value="all" className="gap-2">
+            <TabsTrigger value="all" className="gap-2 hover:cursor-pointer">
               <Globe className="h-4 w-4" />
               전체
             </TabsTrigger>
-            <TabsTrigger value="major" className="gap-2">
+            <TabsTrigger value="major" className="gap-2 hover:cursor-pointer">
               <GraduationCap className="h-4 w-4" />
               전공 동아리
             </TabsTrigger>
-            <TabsTrigger value="general" className="gap-2">
+            <TabsTrigger value="general" className="gap-2 hover:cursor-pointer">
               <Users className="h-4 w-4" />
               일반 동아리
             </TabsTrigger>
@@ -110,7 +110,7 @@ export function ClubListPage({ user }: ClubListPageProps) {
                       selectedDepartment === department ? "default" : "outline"
                     }
                     onClick={() => setSelectedDepartment(department)}
-                    className="whitespace-nowrap"
+                    className="whitespace-nowrap hover:cursor-pointer"
                   >
                     {department}
                   </Button>
@@ -121,7 +121,7 @@ export function ClubListPage({ user }: ClubListPageProps) {
                 <Button
                   variant={recruitStatus === "all" ? "default" : "outline"}
                   onClick={() => setRecruitStatus("all")}
-                  className="whitespace-nowrap"
+                  className="whitespace-nowrap hover:cursor-pointer"
                   size="sm"
                 >
                   전체
@@ -131,7 +131,7 @@ export function ClubListPage({ user }: ClubListPageProps) {
                     recruitStatus === "recruiting" ? "default" : "outline"
                   }
                   onClick={() => setRecruitStatus("recruiting")}
-                  className="whitespace-nowrap"
+                  className="whitespace-nowrap hover:cursor-pointer"
                   size="sm"
                 >
                   모집중
@@ -139,7 +139,7 @@ export function ClubListPage({ user }: ClubListPageProps) {
                 <Button
                   variant={recruitStatus === "closed" ? "default" : "outline"}
                   onClick={() => setRecruitStatus("closed")}
-                  className="whitespace-nowrap"
+                  className="whitespace-nowrap hover:cursor-pointer"
                   size="sm"
                 >
                   모집마감
@@ -153,7 +153,7 @@ export function ClubListPage({ user }: ClubListPageProps) {
               <Button
                 variant={recruitStatus === "all" ? "default" : "outline"}
                 onClick={() => setRecruitStatus("all")}
-                className="whitespace-nowrap"
+                className="whitespace-nowrap hover:cursor-pointer"
                 size="sm"
               >
                 전체
@@ -161,7 +161,7 @@ export function ClubListPage({ user }: ClubListPageProps) {
               <Button
                 variant={recruitStatus === "recruiting" ? "default" : "outline"}
                 onClick={() => setRecruitStatus("recruiting")}
-                className="whitespace-nowrap"
+                className="whitespace-nowrap hover:cursor-pointer"
                 size="sm"
               >
                 모집중
@@ -169,7 +169,7 @@ export function ClubListPage({ user }: ClubListPageProps) {
               <Button
                 variant={recruitStatus === "closed" ? "default" : "outline"}
                 onClick={() => setRecruitStatus("closed")}
-                className="whitespace-nowrap"
+                className="whitespace-nowrap hover:cursor-pointer"
                 size="sm"
               >
                 모집마감

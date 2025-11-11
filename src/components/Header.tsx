@@ -56,15 +56,28 @@ export function Header({ user, setUser }: HeaderProps) {
 
         <div className="flex items-center gap-3">
           {user ? (
-            <Button onClick={handleLogout} variant="outline">
+            <Button
+              onClick={handleLogout}
+              variant="outline"
+              className="hover:cursor-pointer"
+            >
               로그아웃
             </Button>
           ) : (
             <>
-              <Button variant="ghost" onClick={() => navigate("/login")}>
+              <Button
+                variant="ghost"
+                className="hover:cursor-pointer"
+                onClick={() => navigate("/login")}
+              >
                 로그인
               </Button>
-              <Button onClick={() => navigate("/signup")}>회원가입</Button>
+              <Button
+                className="hover:cursor-pointer"
+                onClick={() => navigate("/signup")}
+              >
+                회원가입
+              </Button>
             </>
           )}
         </div>

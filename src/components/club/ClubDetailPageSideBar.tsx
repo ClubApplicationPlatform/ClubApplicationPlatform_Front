@@ -48,7 +48,7 @@ export default function ClubDetailPageSideBar({
           </div>
 
           {club.isRecruiting && (
-            <Button onClick={onApply} className="w-full">
+            <Button onClick={onApply} className="w-full hover:cursor-pointer">
               지원하기
             </Button>
           )}

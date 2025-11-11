@@ -4,6 +4,7 @@ import { useState } from "react";
 import { ClubListPage } from "./pages/club/ClubListPage";
 import { Header } from "./components/Header";
 import { LoginPage } from "./components/auth/LoginPage";
+import { ClubManagerPage } from "./pages/club/ClubManagerPage";
 import { SignupPage } from "./components/auth/SignupPage";
 import {
   BrowserRouter as Router,
@@ -32,7 +33,10 @@ function App() {
             element={<ClubDetailPage user={user} />}
           />
           <Route path="/login" element={<LoginPage setUser={setUser} />} />
-
+          <Route
+            path="/clubs/:clubId/manage"
+            element={<ClubManagerPage user={user} />}
+          />
           <Route path="*" element={<Navigate to="/clubs" replace />} />
         </Routes>
       </div>

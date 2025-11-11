@@ -107,7 +107,7 @@ export function ClubDetailPage({ user }: ClubDetailPageProps) {
                   <Button
                     variant="outline"
                     size="icon"
-                    className="bg-white/90"
+                    className="bg-white/90 hover:cursor-pointer"
                     onClick={handleWishlist}
                   >
                     <Heart
@@ -123,7 +123,7 @@ export function ClubDetailPage({ user }: ClubDetailPageProps) {
                     <Button
                       variant="outline"
                       size="icon"
-                      className="bg-white/90"
+                      className="bg-white/90 hover:cursor-pointer"
                       onClick={() => navigate(`/clubs/${clubId}/manage`)}
                     >
                       <Settings className="h-5 w-5" />
