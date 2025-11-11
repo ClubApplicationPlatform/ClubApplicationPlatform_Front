@@ -1,3 +1,30 @@
+export interface Notice {
+  content: string;
+  date: string;
+  id: string;
+  isImportant: boolean;
+  title: string;
+}
+
+export interface Club {
+  activities: string[];
+  adminId: string;
+  category: string;
+  department: string;
+  description: string;
+  direction: string;
+  id: string;
+  imageUrl: string;
+  isRecruiting: boolean;
+  members: number;
+  name: string;
+  notices: Notice[];
+  recruitDeadline: string;
+  shortDescription: string;
+  tags: string[];
+  type: "major" | "general";
+}
+
 export const mockClubs = [
   {
     id: "1",
