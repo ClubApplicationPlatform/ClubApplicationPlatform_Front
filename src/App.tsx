@@ -3,6 +3,7 @@ import "./App.css";
 import { useState } from "react";
 import { ClubListPage } from "./pages/club/ClubListPage";
 import { Header } from "./components/Header";
+import { LoginPage } from "./components/auth/LoginPage";
 import {
   BrowserRouter as Router,
   Routes,
@@ -28,6 +29,7 @@ function App() {
             path="/clubs/:clubId"
             element={<ClubDetailPage user={user} />}
           />
+          <Route path="/login" element={<LoginPage setUser={setUser} />} />
 
           <Route path="*" element={<Navigate to="/clubs" replace />} />
         </Routes>
