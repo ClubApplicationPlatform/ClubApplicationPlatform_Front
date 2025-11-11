@@ -26,7 +26,7 @@ export default function ClubGrid({
     <AnimatePresence mode="popLayout">
       <motion.div
         key={`${selectedType}-${selectedDepartment}-${recruitStatus}-${searchQuery}`}
-        className="grid gap-6 grid-cols-[repeat(auto-fit,minmax(260px,1fr))]"
+        className="grid gap-6 grid-cols-[repeat(auto-fit,minmax(280px,280px))]"
         initial="hidden"
         animate="visible"
         variants={{

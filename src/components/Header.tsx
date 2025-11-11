@@ -12,7 +12,7 @@ export function Header({ user, setUser }: HeaderProps) {
 
   const handleLogout = () => {
     setUser(null);
-    navigate("/login");
+    navigate("/");
   };
 
   return (
