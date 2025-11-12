@@ -1,13 +1,15 @@
 import { useState } from "react";
-import { Input } from "../../ui/input";
 import { Button } from "../../ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../ui/tabs";
-import { Search, Users, GraduationCap, Globe } from "lucide-react";
+import { Users, GraduationCap, Globe } from "lucide-react";
 import { mockClubs } from "../../lib/mockData";
 import ClubGrid from "../../components/club/ClubGrid";
+import { useClubSearchStore } from "../../stores/clubSearchStore";
 
 export function ClubListPage() {
-  const [searchQuery, setSearchQuery] = useState("");
+  const searchQuery = useClubSearchStore((state) => state.query);
+  const trimmedQuery = searchQuery.trim();
+  const normalizedQuery = trimmedQuery.toLowerCase();
   const [selectedDepartment, setSelectedDepartment] = useState<string>("전체");
   const [selectedType, setSelectedType] = useState<"all" | "major" | "general">(
     "all"
@@ -28,8 +30,9 @@ export function ClubListPage() {
 
   const filteredClubs = mockClubs.filter((club) => {
     const matchesSearch =
-      club.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      club.shortDescription.toLowerCase().includes(searchQuery.toLowerCase());
+      trimmedQuery === "" ||
+      club.name.toLowerCase().includes(normalizedQuery) ||
+      club.shortDescription.toLowerCase().includes(normalizedQuery);
     const matchesType = selectedType === "all" || club.type === selectedType;
 
     // 전공 동아리일 때만 학과 필터 적용
@@ -59,20 +62,20 @@ export function ClubListPage() {
           <p className="mb-8 text-blue-50">
             관심있는 동아리를 찾아 지원해보세요
           </p>
-
-          <div className="relative max-w-2xl">
-            <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-200" />
-            <Input
-              placeholder="동아리 이름이나 키워드로 검색"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-12 h-14 text-gray-900 bg-white"
-            />
-          </div>
         </div>
       </div>
 
       <div className="container mx-auto px-4 py-8">
+        {trimmedQuery && (
+          <div className="mb-8 rounded-lg border border-blue-100 bg-white p-4 shadow-sm">
+            <p className="text-sm text-gray-600">
+              <span className="font-semibold text-blue-600">
+                "{trimmedQuery}"
+              </span>
+              {"에 대한 결과입니다."}
+            </p>
+          </div>
+        )}
         <Tabs
           value={selectedType}
           onValueChange={(v) => {

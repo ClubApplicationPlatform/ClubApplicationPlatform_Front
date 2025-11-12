@@ -25,7 +25,8 @@ export function WishlistPage() {
   }
 
   const handleViewClub = (clubId: string) => navigate(`/clubs/${clubId}`);
-  const handleApplyClub = (clubId: string) => navigate(`/clubs/${clubId}/apply`);
+  const handleApplyClub = (clubId: string) =>
+    navigate(`/clubs/${clubId}/apply`);
   const handleToggleWishlist = () =>
     toast.info("찜 기능은 곧 제공될 예정입니다.");
 
@@ -37,12 +38,14 @@ export function WishlistPage() {
       </div>
 
       {wishlistedClubs.length > 0 ? (
-        <WishlistGrid
-          clubs={wishlistedClubs}
-          onViewClub={handleViewClub}
-          onApplyClub={handleApplyClub}
-          onToggleWishlist={handleToggleWishlist}
-        />
+        <div className="grid gap-6 grid-cols-[repeat(auto-fit,minmax(260px,1fr))]">
+          <WishlistGrid
+            clubs={wishlistedClubs}
+            onViewClub={handleViewClub}
+            onApplyClub={handleApplyClub}
+            onToggleWishlist={handleToggleWishlist}
+          />
+        </div>
       ) : (
         <WishlistEmptyState onExploreClubs={() => navigate("/clubs")} />
       )}

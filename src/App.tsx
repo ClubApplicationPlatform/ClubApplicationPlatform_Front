@@ -10,30 +10,40 @@ import {
   Routes,
   Route,
   Navigate,
+  useLocation,
 } from "react-router-dom";
 import { ClubDetailPage } from "./pages/club/ClubDetailPage";
 import { WishlistPage } from "./pages/club/WishlistPage";
 
+function AppContainer() {
+  const location = useLocation();
+  const hideHeader = ["/login", "/signup"].includes(location.pathname);
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      {!hideHeader && <Header />}
+      <Routes>
+        <Route path="/" element={<Navigate to="/clubs" replace />} />
+        <Route
+          path="/preview_page.html"
+          element={<Navigate to="/clubs" replace />}
+        />
+        <Route path="/clubs" element={<ClubListPage />} />
+        <Route path="/signup" element={<SignupPage />} />
+        <Route path="/clubs/:clubId" element={<ClubDetailPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/clubs/:clubId/manage" element={<ClubManagerPage />} />
+        <Route path="/wishlist" element={<WishlistPage />} />
+        <Route path="*" element={<Navigate to="/clubs" replace />} />
+      </Routes>
+    </div>
+  );
+}
+
 function App() {
   return (
     <Router>
-      <div className="min-h-screen bg-gray-50">
-        <Header />
-        <Routes>
-          <Route path="/" element={<Navigate to="/clubs" replace />} />
-          <Route
-            path="/preview_page.html"
-            element={<Navigate to="/clubs" replace />}
-          />
-          <Route path="/clubs" element={<ClubListPage />} />
-          <Route path="/signup" element={<SignupPage />} />
-          <Route path="/clubs/:clubId" element={<ClubDetailPage />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/clubs/:clubId/manage" element={<ClubManagerPage />} />
-          <Route path="/wishlist" element={<WishlistPage />} />
-          <Route path="*" element={<Navigate to="/clubs" replace />} />
-        </Routes>
-      </div>
+      <AppContainer />
     </Router>
   );
 }
