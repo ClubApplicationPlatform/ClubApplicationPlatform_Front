@@ -6,11 +6,7 @@ import { Search, Users, GraduationCap, Globe } from "lucide-react";
 import { mockClubs } from "../../lib/mockData";
 import ClubGrid from "../../components/club/ClubGrid";
 
-interface ClubListPageProps {
-  user: any;
-}
-
-export function ClubListPage({ user }: ClubListPageProps) {
+export function ClubListPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedDepartment, setSelectedDepartment] = useState<string>("전체");
   const [selectedType, setSelectedType] = useState<"all" | "major" | "general">(

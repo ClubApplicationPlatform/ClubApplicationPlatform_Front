@@ -1,17 +1,17 @@
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "../ui/button";
 import Logo from "../../public/assets/JoinUs_Logo.png";
+import { useAuthStore } from "../stores/authStore";
 
-interface HeaderProps {
-  user: any;
-  setUser: (user: any) => void;
-}
-
-export function Header({ user, setUser }: HeaderProps) {
+export function Header() {
   const navigate = useNavigate();
+  const { user, logout } = useAuthStore((state) => ({
+    user: state.user,
+    logout: state.logout,
+  }));
 
   const handleLogout = () => {
-    setUser(null);
+    logout();
     navigate("/");
   };
 

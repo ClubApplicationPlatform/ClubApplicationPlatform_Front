@@ -9,14 +9,12 @@ import { mockClubs } from "../../lib/mockData";
 import { toast } from "sonner";
 import ClubDetailPageSideBar from "../../components/club/ClubDetailPageSideBar";
 import ClubDetailPageHero from "../../components/club/ClubDetailPageHero";
+import { useAuthStore } from "../../stores/authStore";
 
-interface ClubDetailPageProps {
-  user: any;
-}
-
-export function ClubDetailPage({ user }: ClubDetailPageProps) {
+export function ClubDetailPage() {
   const { clubId } = useParams();
   const navigate = useNavigate();
+  const user = useAuthStore((state) => state.user);
   const [isWishlisted, setIsWishlisted] = useState(false);
 
   const club = mockClubs.find((c) => c.id === clubId);

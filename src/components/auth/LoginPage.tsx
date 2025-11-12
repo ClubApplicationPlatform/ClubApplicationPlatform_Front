@@ -11,17 +11,15 @@ import {
   CardTitle,
 } from "../../ui/card";
 import { toast } from "sonner";
+import { useAuthStore } from "../../stores/authStore";
 
-interface LoginPageProps {
-  setUser: (user: any) => void;
-}
-
-export function LoginPage({ setUser }: LoginPageProps) {
+export function LoginPage() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
+  const login = useAuthStore((state) => state.login);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -35,7 +33,7 @@ export function LoginPage({ setUser }: LoginPageProps) {
       role: userId.startsWith("admin") ? "admin" : "user",
     };
 
-    setUser(user);
+    login(user);
     toast.success("로그인되었습니다.");
     navigate("/clubs");
   };
