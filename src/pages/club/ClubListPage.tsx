@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, type CSSProperties } from "react";
 import { Button } from "../../ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../ui/tabs";
 import { Users, GraduationCap, Globe } from "lucide-react";
@@ -52,7 +52,6 @@ export function ClubListPage() {
 
   const majorClubs = filteredClubs.filter((club) => club.type === "major");
   const generalClubs = filteredClubs.filter((club) => club.type === "general");
-
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
