@@ -14,7 +14,7 @@ import {
 } from "react-router-dom";
 import { ClubDetailPage } from "./pages/club/ClubDetailPage";
 import { WishlistPage } from "./pages/club/WishlistPage";
-import { ApplicantDetailPage } from "./pages/application/ApplicantDetailPage";
+import { ApplicationDetailPage } from "./pages/application/ApplicationDetailPage";
 
 function AppContainer() {
   const location = useLocation();
@@ -35,7 +35,7 @@ function AppContainer() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/clubs/:clubId/manage" element={<ClubManagerPage />} />
         <Route path="/wishlist" element={<WishlistPage />} />
-        <Route path="/applications/:applicationId" element={<ApplicantDetailPage />} />
+        <Route path="/applications/:applicationId" element={<ApplicationDetailPage />} />
         <Route path="*" element={<Navigate to="/clubs" replace />} />
       </Routes>
     </div>
