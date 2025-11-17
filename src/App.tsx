@@ -17,6 +17,7 @@ import { WishlistPage } from "./pages/club/WishlistPage";
 import { ApplicationDetailPage } from "./pages/application/ApplicationDetailPage";
 import { ApplyPage } from "./pages/application/ApplyPage";
 import { MyApplicationsPage } from "./pages/application/MyApplicationsPage";
+import { InterviewSelectPage } from "./pages/application/InterviewSelectPage";
 import { MyPage } from "./pages/account/MyPage";
 import { NotificationCenter } from "./pages/account/NotificationCenter";
 import { FAQPage } from "./pages/faq/FAQPage";
@@ -41,6 +42,7 @@ function AppContainer() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/clubs/:clubId/manage" element={<ClubManagerPage />} />
         <Route path="/clubs/:clubId/apply" element={<ApplyPage />} />
+        <Route path="/clubs/:clubId/interview" element={<InterviewSelectPage />} />
         <Route path="/wishlist" element={<WishlistPage />} />
         <Route path="/applications/:applicationId" element={<ApplicationDetailPage />} />
         <Route path="/my/applications" element={<MyApplicationsPage />} />
