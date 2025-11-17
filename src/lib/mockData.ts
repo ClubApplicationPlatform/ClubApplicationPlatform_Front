@@ -1,4 +1,5 @@
 import type { Application } from "../types/application";
+import type { NotificationItem } from "../types/notification";
 
 export interface Notice {
   content: string;
@@ -838,7 +839,7 @@ export const mockInterviewSlots = [
   },
 ];
 
-export const mockNotifications = [
+export const mockNotifications: NotificationItem[] = [
   {
     id: "noti-1",
     type: "recruitment",
