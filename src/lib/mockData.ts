@@ -1,13 +1,6 @@
 import type { Application } from "../types/application";
 import type { NotificationItem } from "../types/notification";
-
-export interface Notice {
-  content: string;
-  date: string;
-  id: string;
-  isImportant: boolean;
-  title: string;
-}
+import type { Notice } from "../types/notice";
 
 export interface Club {
   activities: string[];

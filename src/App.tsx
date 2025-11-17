@@ -20,6 +20,7 @@ import { MyApplicationsPage } from "./pages/application/MyApplicationsPage";
 import { MyPage } from "./pages/account/MyPage";
 import { NotificationCenter } from "./pages/account/NotificationCenter";
 import { FAQPage } from "./pages/faq/FAQPage";
+import { NoticePage } from "./pages/notice/NoticePage";
 
 function AppContainer() {
   const location = useLocation();
@@ -46,6 +47,7 @@ function AppContainer() {
         <Route path="/mypage" element={<MyPage />} />
         <Route path="/notifications" element={<NotificationCenter />} />
         <Route path="/faq" element={<FAQPage />} />
+        <Route path="/notices" element={<NoticePage />} />
         <Route path="*" element={<Navigate to="/clubs" replace />} />
       </Routes>
     </div>
