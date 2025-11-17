@@ -1,3 +1,5 @@
+import type { Application } from "../types/application";
+
 export interface Notice {
   content: string;
   date: string;
@@ -33,11 +35,11 @@ export const mockClubs: Club[] = [
     category: "에너지/전력",
     department: "전기전자공학과",
     adminId: "sg_lead",
-    shortDescription: "스마트그리드 핵심 기술과 국가 로드맵을 연구하는 전공 동아리",
+    shortDescription:
+      "스마트그리드 핵심 기술과 국가 로드맵을 연구하는 전공 동아리",
     description:
       "스마트그리드 연구회는 스마트 전력망 전반의 구성 요소와 산업 현황을 분석하고, 국가 로드맵을 기반으로 핵심 기술을 연구하는 학술 동아리입니다. 스마트 전력·신재생·운송·소비자·전력 서비스 영역의 최신 기술을 이론과 실습으로 익힙니다.",
-    imageUrl:
-      "https://images.unsplash.com/photo-1509391366360-2e959784a276?auto=format&fit=crop&w=1200&q=80",
+    imageUrl: "../../public/assets/smartGrid.png",
     members: 34,
     tags: ["스마트그리드", "에너지", "로드맵"],
     isRecruiting: true,
@@ -62,7 +64,8 @@ export const mockClubs: Club[] = [
       {
         id: "sg-notice-2",
         title: "국가 로드맵 스터디 OT",
-        content: "국가 스마트그리드 로드맵 문서 기반 스터디 OT가 11월 7일 오후 7시에 열립니다.",
+        content:
+          "국가 스마트그리드 로드맵 문서 기반 스터디 OT가 11월 7일 오후 7시에 열립니다.",
         date: "2025-11-05",
         isImportant: false,
       },
@@ -78,8 +81,7 @@ export const mockClubs: Club[] = [
     shortDescription: "사물인터넷 하드웨어·소프트웨어 융합 개발 동아리",
     description:
       "IoT 연구회는 센서와 통신, 보안 기술을 융합해 연결된 서비스를 구현합니다. Arduino 등 교육용 플랫폼으로 센서 디바이스를 직접 제작하고, 모바일 앱·네트워크·AI 분석까지 연계한 스마트홈·IoT 서비스를 실습합니다.",
-    imageUrl:
-      "https://images.unsplash.com/photo-1488229297570-58520851e868?auto=format&fit=crop&w=1200&q=80",
+    imageUrl: "../../public/assets/iotStudy.png",
     members: 41,
     tags: ["IoT", "Arduino", "네트워크"],
     isRecruiting: true,
@@ -114,8 +116,7 @@ export const mockClubs: Club[] = [
     shortDescription: "객체 탐지·영상 인식 프로젝트 기반 AI 연구 동아리",
     description:
       "AI 인식 Lab은 컴퓨터 비전과 딥러닝을 중심으로 객체 탐지, 영상 인식 모델을 직접 설계하고 응용 프로젝트를 수행합니다. 최신 AI 트렌드 리서치와 실무형 프로젝트를 병행해 산업에서 활용 가능한 모델을 만드는 것이 목표입니다.",
-    imageUrl:
-      "https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?auto=format&fit=crop&w=1200&q=80",
+    imageUrl: "../../public/assets/aiLab.png",
     members: 29,
     tags: ["컴퓨터비전", "딥러닝", "Object Detection"],
     isRecruiting: false,
@@ -126,12 +127,14 @@ export const mockClubs: Club[] = [
       "AI 모델 학습·튜닝 실습",
       "산업 응용 PoC 프로젝트",
     ],
-    direction: "딥러닝 모델링 전 과정을 경험하며 실무에서 통용되는 컴퓨터 비전 역량을 확보합니다.",
+    direction:
+      "딥러닝 모델링 전 과정을 경험하며 실무에서 통용되는 컴퓨터 비전 역량을 확보합니다.",
     notices: [
       {
         id: "ai-notice-1",
         title: "Vision-Language 세션 모집",
-        content: "영상 캡셔닝과 멀티모달 모델 실험에 참여할 인원을 11월 15일까지 모집합니다.",
+        content:
+          "영상 캡셔닝과 멀티모달 모델 실험에 참여할 인원을 11월 15일까지 모집합니다.",
         date: "2025-11-02",
         isImportant: false,
       },
@@ -147,8 +150,7 @@ export const mockClubs: Club[] = [
     shortDescription: "친환경 전기차·발전 시스템을 연구하는 실습 중심 동아리",
     description:
       "에코(E-CO)는 친환경 자동차 및 발전 시스템을 설계·제작하는 동아리입니다. 전동 킥보드, 소형 전기차, 발전기 등을 직접 제작하며 전기전자 전공 지식을 심화합니다.",
-    imageUrl:
-      "https://images.unsplash.com/photo-1505798577917-a65157d3320b?auto=format&fit=crop&w=1200&q=80",
+    imageUrl: "../../public/assets/eco.png",
     members: 26,
     tags: ["전기차", "HEV/EV", "발전"],
     isRecruiting: true,
@@ -182,8 +184,7 @@ export const mockClubs: Club[] = [
     shortDescription: "ARM 기반 임베디드 프로세서를 연구하는 전공 동아리",
     description:
       "EPL은 ARM 기반 SoC 구조와 임베디드 소프트웨어를 연구합니다. 하드웨어 기초부터 FreeRTOS 포팅까지 전 과정을 다루며 산업체에서 요구하는 실무 능력을 키웁니다.",
-    imageUrl:
-      "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1200&q=80",
+    imageUrl: "../../public/assets/epl.png",
     members: 31,
     tags: ["ARM", "임베디드", "RTOS"],
     isRecruiting: true,
@@ -200,7 +201,8 @@ export const mockClubs: Club[] = [
       {
         id: "epl-notice-1",
         title: "FreeRTOS 실습 조 편성",
-        content: "겨울방학 FreeRTOS 집중 캠프 참가자를 모집합니다. 11월 18일까지 신청해주세요.",
+        content:
+          "겨울방학 FreeRTOS 집중 캠프 참가자를 모집합니다. 11월 18일까지 신청해주세요.",
         date: "2025-11-09",
         isImportant: false,
       },
@@ -216,8 +218,7 @@ export const mockClubs: Club[] = [
     shortDescription: "전력 시스템 제어 알고리즘과 시뮬레이션 연구 동아리",
     description:
       "PECS는 전력 설비 제어 알고리즘, 디지털 보호계전기, HVDC/MVDC/LVDC 그리드 모델링을 연구하며 실시간 시뮬레이터로 제어 로직을 검증합니다.",
-    imageUrl:
-      "https://images.unsplash.com/photo-1517180102446-f3ece451e9d8?auto=format&fit=crop&w=1200&q=80",
+    imageUrl: "../../public/assets/pecs.png",
     members: 24,
     tags: ["전력제어", "HVDC", "시뮬레이션"],
     isRecruiting: false,
@@ -234,7 +235,8 @@ export const mockClubs: Club[] = [
       {
         id: "pecs-notice-1",
         title: "실시간 시뮬레이터 점검",
-        content: "11월 셋째 주 장비 점검으로 Evening Session 일정이 변경됩니다.",
+        content:
+          "11월 셋째 주 장비 점검으로 Evening Session 일정이 변경됩니다.",
         date: "2025-11-04",
         isImportant: false,
       },
@@ -256,8 +258,13 @@ export const mockClubs: Club[] = [
     tags: ["CATIA", "3D설계", "프로토타입"],
     isRecruiting: true,
     recruitDeadline: "2025-11-18",
-    activities: ["3D 모델링 워크숍", "설계 검토 및 피드백 세션", "산업체 과제 기반 작품 제작"],
-    direction: "설계 툴 숙련도 향상과 팀 기반 작품 제작 경험을 동시에 확보합니다.",
+    activities: [
+      "3D 모델링 워크숍",
+      "설계 검토 및 피드백 세션",
+      "산업체 과제 기반 작품 제작",
+    ],
+    direction:
+      "설계 툴 숙련도 향상과 팀 기반 작품 제작 경험을 동시에 확보합니다.",
     notices: [
       {
         id: "catia-notice-1",
@@ -284,13 +291,19 @@ export const mockClubs: Club[] = [
     tags: ["유공압", "모션제어", "프로토타입"],
     isRecruiting: true,
     recruitDeadline: "2025-11-24",
-    activities: ["유공압 회로 설계 스터디", "소규모 자동화 장치 제작", "산업체 연계 작품 발표"],
-    direction: "산업용 공압장비 설계를 실습하며 프로젝트 기획·제작 능력을 기릅니다.",
+    activities: [
+      "유공압 회로 설계 스터디",
+      "소규모 자동화 장치 제작",
+      "산업체 연계 작품 발표",
+    ],
+    direction:
+      "산업용 공압장비 설계를 실습하며 프로젝트 기획·제작 능력을 기릅니다.",
     notices: [
       {
         id: "pneu-notice-1",
         title: "공압제어 기본 교육",
-        content: "신입 부원을 위한 공압 실습 교육을 11월 16일 기계관 실험실에서 진행합니다.",
+        content:
+          "신입 부원을 위한 공압 실습 교육을 11월 16일 기계관 실험실에서 진행합니다.",
         date: "2025-11-08",
         isImportant: false,
       },
@@ -312,8 +325,13 @@ export const mockClubs: Club[] = [
     tags: ["기계설계", "시제품", "탐색"],
     isRecruiting: true,
     recruitDeadline: "2025-11-21",
-    activities: ["주제 탐색 워크숍", "설계-제작-테스트 전 과정 실습", "학기말 성과 전시 참가"],
-    direction: "현장 문제를 자체 프로젝트로 정의하고 해결하는 전공 심화 경험을 제공합니다.",
+    activities: [
+      "주제 탐색 워크숍",
+      "설계-제작-테스트 전 과정 실습",
+      "학기말 성과 전시 참가",
+    ],
+    direction:
+      "현장 문제를 자체 프로젝트로 정의하고 해결하는 전공 심화 경험을 제공합니다.",
     notices: [
       {
         id: "project-notice-1",
@@ -332,20 +350,26 @@ export const mockClubs: Club[] = [
     department: "기계공학과",
     adminId: "mechanism_lead",
     shortDescription: "공압장비 이해와 이동장비 제작을 목표로 하는 동아리",
-    description: "메커니즘 동아리는 공압장비 구조를 학습하고 소규모 이동장비를 직접 제작합니다.",
+    description:
+      "메커니즘 동아리는 공압장비 구조를 학습하고 소규모 이동장비를 직접 제작합니다.",
     imageUrl:
       "https://images.unsplash.com/photo-1465153690352-10c1b29577f8?auto=format&fit=crop&w=1200&q=80",
     members: 19,
     tags: ["공압", "메커니즘", "모빌리티"],
     isRecruiting: false,
     recruitDeadline: "2025-09-30",
-    activities: ["공압 구성품 분해/조립 실습", "미니 이동장비 제작 프로젝트", "제어 로직 튜닝 워크숍"],
+    activities: [
+      "공압 구성품 분해/조립 실습",
+      "미니 이동장비 제작 프로젝트",
+      "제어 로직 튜닝 워크숍",
+    ],
     direction: "기계 동역학 이해를 바탕으로 실제 움직이는 장비를 구현합니다.",
     notices: [
       {
         id: "mech-notice-1",
         title: "가을 전시 준비",
-        content: "프로토타입 시험 주행 일정이 11월 14일에 있습니다. 참가 팀은 파워팩을 점검해 주세요.",
+        content:
+          "프로토타입 시험 주행 일정이 11월 14일에 있습니다. 참가 팀은 파워팩을 점검해 주세요.",
         date: "2025-11-07",
         isImportant: true,
       },
@@ -367,7 +391,11 @@ export const mockClubs: Club[] = [
     tags: ["AutoCAD", "도면", "세미나"],
     isRecruiting: true,
     recruitDeadline: "2025-12-01",
-    activities: ["Advanced 명령어 실습", "실무 사례 세미나", "도면 리뷰 및 피드백"],
+    activities: [
+      "Advanced 명령어 실습",
+      "실무 사례 세미나",
+      "도면 리뷰 및 피드백",
+    ],
     direction: "CAD 실무 감각을 키워 다양한 분야에 적용합니다.",
     notices: [
       {
@@ -395,8 +423,13 @@ export const mockClubs: Club[] = [
     tags: ["유체", "열전달", "시뮬레이션"],
     isRecruiting: true,
     recruitDeadline: "2025-11-19",
-    activities: ["유체 실험 장비 운용", "열·유동 해석 시뮬레이션", "공정 개선 아이디어 발표"],
-    direction: "이론과 실험을 병행하여 산업 현장의 흐름 제어 문제를 해결합니다.",
+    activities: [
+      "유체 실험 장비 운용",
+      "열·유동 해석 시뮬레이션",
+      "공정 개선 아이디어 발표",
+    ],
+    direction:
+      "이론과 실험을 병행하여 산업 현장의 흐름 제어 문제를 해결합니다.",
     notices: [
       {
         id: "flow-notice-1",
@@ -423,13 +456,20 @@ export const mockClubs: Club[] = [
     tags: ["ANSYS", "FEM", "해석"],
     isRecruiting: true,
     recruitDeadline: "2025-11-26",
-    activities: ["정기 모임 및 실습", "ANSYS 구조 해석 교육", "실무형 해석 프로젝트", "연말 전시회 참가"],
-    direction: "해석 도구를 활용한 설계 검증 능력을 갖추어 산업 현장 대응력을 높입니다.",
+    activities: [
+      "정기 모임 및 실습",
+      "ANSYS 구조 해석 교육",
+      "실무형 해석 프로젝트",
+      "연말 전시회 참가",
+    ],
+    direction:
+      "해석 도구를 활용한 설계 검증 능력을 갖추어 산업 현장 대응력을 높입니다.",
     notices: [
       {
         id: "analysis-notice-1",
         title: "ANSYS 기본반 개강",
-        content: "초급반이 11월 18일 개강합니다. 노트북에 라이선스 설치 바랍니다.",
+        content:
+          "초급반이 11월 18일 개강합니다. 노트북에 라이선스 설치 바랍니다.",
         date: "2025-11-09",
         isImportant: false,
       },
@@ -442,7 +482,8 @@ export const mockClubs: Club[] = [
     category: "미세공정",
     department: "스마트기계공학과",
     adminId: "nano_lead",
-    shortDescription: "반도체·디스플레이·이차전지 공정을 연구하는 미세 가공 동아리",
+    shortDescription:
+      "반도체·디스플레이·이차전지 공정을 연구하는 미세 가공 동아리",
     description:
       "나노 메카는 반도체 8대 공정, 디스플레이, 이차전지 기술을 학습하고 비전통적 가공법 실습을 통해 제품 개발 프로젝트를 수행합니다.",
     imageUrl:
@@ -451,13 +492,20 @@ export const mockClubs: Club[] = [
     tags: ["반도체", "디스플레이", "미세가공"],
     isRecruiting: true,
     recruitDeadline: "2025-12-03",
-    activities: ["이론 세미나", "미세 형상 제작 실습", "공정 장비 활용 프로젝트", "전시회 출품"],
-    direction: "첨단 제조 공정에 대한 이론과 실습을 통합해 실무 역량을 확보합니다.",
+    activities: [
+      "이론 세미나",
+      "미세 형상 제작 실습",
+      "공정 장비 활용 프로젝트",
+      "전시회 출품",
+    ],
+    direction:
+      "첨단 제조 공정에 대한 이론과 실습을 통합해 실무 역량을 확보합니다.",
     notices: [
       {
         id: "nano-notice-1",
         title: "클린룸 견학 안내",
-        content: "디스플레이 공정 장비 견학이 11월 27일 예정입니다. 방진복 사이즈를 조사 중입니다.",
+        content:
+          "디스플레이 공정 장비 견학이 11월 27일 예정입니다. 방진복 사이즈를 조사 중입니다.",
         date: "2025-11-13",
         isImportant: true,
       },
@@ -473,14 +521,14 @@ export const mockClubs: Club[] = [
     shortDescription: "팀 프로젝트와 해커톤으로 함께 성장하는 개발 동아리",
     description:
       "TripleS는 실무형 팀 프로젝트와 각종 경진대회 참가를 통해 개발 실력을 끌어올리는 동아리입니다. 선후배가 함께하며 취업에 도움이 되는 포트폴리오를 만듭니다.",
-    imageUrl:
-      "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1200&q=80",
+    imageUrl: "../../public/assets/tripleS.png",
     members: 38,
     tags: ["팀프로젝트", "해커톤", "취업"],
     isRecruiting: true,
     recruitDeadline: "2025-11-29",
     activities: ["정기 팀 프로젝트", "경진대회·해커톤 참가", "선후배 멘토링"],
-    direction: "함께 성장하는 문화 속에서 실무 중심 프로젝트 경험을 축적합니다.",
+    direction:
+      "함께 성장하는 문화 속에서 실무 중심 프로젝트 경험을 축적합니다.",
     notices: [
       {
         id: "triples-notice-1",
@@ -501,14 +549,18 @@ export const mockClubs: Club[] = [
     shortDescription: "오픈소스를 활용해 AI 애플리케이션을 개발하는 동아리",
     description:
       "OpenAI 동아리는 오픈소스 프레임워크를 활용해 AI·컴퓨터비전 기술을 학습하고 응용합니다. 학기 말에는 프로젝트를 경진대회에 출품합니다.",
-    imageUrl:
-      "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1200&q=80",
+    imageUrl: "../../public/assets/openAi.png",
     members: 33,
     tags: ["AI", "오픈소스", "컴퓨터비전"],
     isRecruiting: true,
     recruitDeadline: "2025-11-25",
-    activities: ["AI 오픈소스 스터디", "프로젝트 기반 애플리케이션 개발", "전공동아리 공모전 참가"],
-    direction: "AI 기술을 실서비스로 구현하는 과정을 반복해 실무 역량을 확보합니다.",
+    activities: [
+      "AI 오픈소스 스터디",
+      "프로젝트 기반 애플리케이션 개발",
+      "전공동아리 공모전 참가",
+    ],
+    direction:
+      "AI 기술을 실서비스로 구현하는 과정을 반복해 실무 역량을 확보합니다.",
     notices: [
       {
         id: "openai-notice-1",
@@ -529,19 +581,25 @@ export const mockClubs: Club[] = [
     shortDescription: "SAP·ERPSIM 중심의 실무 역량을 기르는 ERP 동아리",
     description:
       "ERPro는 SAP, ERPSIM, ABAP 프로젝트와 자격증 스터디를 통해 ERP 전문가로 성장하는 것을 목표로 합니다.",
-    imageUrl:
-      "https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?auto=format&fit=crop&w=1200&q=80",
+    imageUrl: "../../public/assets/erpro.png",
     members: 28,
     tags: ["SAP", "ERP", "ABAP"],
     isRecruiting: false,
     recruitDeadline: "2025-10-20",
-    activities: ["SAP 모듈 스터디", "ERPSIM 시뮬레이션", "ABAP 프로젝트", "자격증 스터디"],
-    direction: "기업 실무에 필요한 ERP 프로세스 이해와 개발 역량을 동시에 갖춥니다.",
+    activities: [
+      "SAP 모듈 스터디",
+      "ERPSIM 시뮬레이션",
+      "ABAP 프로젝트",
+      "자격증 스터디",
+    ],
+    direction:
+      "기업 실무에 필요한 ERP 프로세스 이해와 개발 역량을 동시에 갖춥니다.",
     notices: [
       {
         id: "erpro-notice-1",
         title: "SAP 인증 대비반",
-        content: "겨울 자격증 대비반을 준비합니다. 신청자는 11월 12일까지 구글폼 제출!",
+        content:
+          "겨울 자격증 대비반을 준비합니다. 신청자는 11월 12일까지 구글폼 제출!",
         date: "2025-11-04",
         isImportant: true,
       },
@@ -557,8 +615,7 @@ export const mockClubs: Club[] = [
     shortDescription: "최신 기술로 자유롭게 실전 프로젝트를 수행하는 동아리",
     description:
       "Digital Playground는 웹/앱, AI, 프론트엔드 프레임워크 등 최신 기술을 즐겁게 실험하며 실전 프로젝트를 수행합니다. 정기 스터디, 외부 세미나, 멘토링으로 역량을 확장하고 공모전에 도전합니다.",
-    imageUrl:
-      "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1200&q=80",
+    imageUrl: "../../public/assets/digitalPlayground.png",
     members: 36,
     tags: ["웹앱", "AI", "프로젝트"],
     isRecruiting: true,
@@ -575,7 +632,8 @@ export const mockClubs: Club[] = [
       {
         id: "digital-notice-1",
         title: "창의 프로젝트 제안서 접수",
-        content: "학기말 전시를 위한 창의 프로젝트 제안서를 11월 24일까지 제출하세요.",
+        content:
+          "학기말 전시를 위한 창의 프로젝트 제안서를 11월 24일까지 제출하세요.",
         date: "2025-11-10",
         isImportant: false,
       },
@@ -583,7 +641,7 @@ export const mockClubs: Club[] = [
   },
 ];
 
-export const mockApplications = [
+export const mockApplications: Application[] = [
   {
     id: "app-1",
     clubId: "sg01",
@@ -630,7 +688,8 @@ export const mockApplications = [
     interviewSlot: "2025-11-14 16:00",
     result: {
       status: "accepted",
-      message: "최종 합격을 축하합니다! 11월 18일 오후 7시에 진행되는 오리엔테이션에 참석해주세요.",
+      message:
+        "최종 합격을 축하합니다! 11월 18일 오후 7시에 진행되는 오리엔테이션에 참석해주세요.",
       decidedAt: "2025-11-08",
     },
   },
@@ -758,7 +817,8 @@ export const mockQuestions = [
   {
     id: "q-1",
     clubId: "sg01",
-    question: "스마트그리드 연구에서 관심 있는 로드맵 분야와 이유를 작성해주세요.",
+    question:
+      "스마트그리드 연구에서 관심 있는 로드맵 분야와 이유를 작성해주세요.",
     order: 1,
     maxLength: 500,
   },
@@ -772,7 +832,8 @@ export const mockQuestions = [
   {
     id: "q-3",
     clubId: "triples01",
-    question: "협업 프로젝트 경험 중 가장 기억에 남는 사례와 역할을 공유해주세요.",
+    question:
+      "협업 프로젝트 경험 중 가장 기억에 남는 사례와 역할을 공유해주세요.",
     order: 1,
     maxLength: 600,
   },
