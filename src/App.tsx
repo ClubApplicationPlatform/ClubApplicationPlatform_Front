@@ -17,6 +17,7 @@ import { WishlistPage } from "./pages/club/WishlistPage";
 import { ApplicationDetailPage } from "./pages/application/ApplicationDetailPage";
 import { ApplyPage } from "./pages/application/ApplyPage";
 import { MyApplicationsPage } from "./pages/application/MyApplicationsPage";
+import { MyPage } from "./pages/account/MyPage";
 
 function AppContainer() {
   const location = useLocation();
@@ -40,6 +41,7 @@ function AppContainer() {
         <Route path="/wishlist" element={<WishlistPage />} />
         <Route path="/applications/:applicationId" element={<ApplicationDetailPage />} />
         <Route path="/my/applications" element={<MyApplicationsPage />} />
+        <Route path="/mypage" element={<MyPage />} />
         <Route path="*" element={<Navigate to="/clubs" replace />} />
       </Routes>
     </div>
