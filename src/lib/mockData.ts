@@ -1,6 +1,7 @@
 import type { Application } from "../types/application";
 import type { NotificationItem } from "../types/notification";
 import type { Notice } from "../types/notice";
+import type { InterviewSlot } from "../types/interview";
 
 export interface Club {
   activities: string[];
@@ -769,7 +770,7 @@ export const mockApplications: Application[] = [
   },
 ];
 
-export const mockInterviewSlots = [
+export const mockInterviewSlots: InterviewSlot[] = [
   {
     id: "slot-1",
     clubId: "sg01",
