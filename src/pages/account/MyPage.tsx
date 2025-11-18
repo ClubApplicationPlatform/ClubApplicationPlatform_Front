@@ -6,7 +6,11 @@ import { ApplicationsTab } from "../../components/mypage/ApplicationsTab";
 import { MyPageTabs } from "../../components/mypage/MyPageTabs";
 import { ProfileTab } from "../../components/mypage/ProfileTab";
 import { WishlistTab } from "../../components/mypage/WishlistTab";
-import { mockApplications, mockWishlistedProjects } from "../../lib/mockData";
+import {
+  mockApplications,
+  mockClubs,
+  mockUserWishlists,
+} from "../../lib/mockData";
 import { useAuthStore } from "../../stores/authStore";
 import { Button } from "../../ui/button";
 import { Card, CardContent } from "../../ui/card";
@@ -71,7 +75,12 @@ export function MyPage() {
     setActiveTab(tabId);
   };
 
-  const wishlistedProjects = mockWishlistedProjects;
+  const wishlistEntry =
+    mockUserWishlists.find((entry) => entry.userId === user.id) ??
+    mockUserWishlists.find((entry) => entry.userId === "default_user");
+  const wishlistedClubs = wishlistEntry
+    ? mockClubs.filter((club) => wishlistEntry.clubIds.includes(club.id))
+    : [];
   const userApplications = mockApplications.filter(
     (application) => application.applicantId === user.id
   );
@@ -84,7 +93,11 @@ export function MyPage() {
       </div>
 
       <div className="w-full">
-        <MyPageTabs tabs={TABS} activeTab={activeTab} onChange={handleTabChange} />
+        <MyPageTabs
+          tabs={TABS}
+          activeTab={activeTab}
+          onChange={handleTabChange}
+        />
 
         <div className="relative overflow-hidden">
           <AnimatePresence initial={false} custom={direction} mode="wait">
@@ -112,7 +125,10 @@ export function MyPage() {
                 exit="exit"
                 transition={transition}
               >
-                <ApplicationsTab applications={userApplications} onNavigate={navigate} />
+                <ApplicationsTab
+                  applications={userApplications}
+                  onNavigate={navigate}
+                />
               </motion.div>
             )}
 
@@ -126,7 +142,7 @@ export function MyPage() {
                 exit="exit"
                 transition={transition}
               >
-                <WishlistTab projects={wishlistedProjects} onNavigate={navigate} />
+                <WishlistTab clubs={wishlistedClubs} onNavigate={navigate} />
               </motion.div>
             )}
           </AnimatePresence>

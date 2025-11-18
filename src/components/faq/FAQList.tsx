@@ -16,7 +16,7 @@ export function FAQList({ faqs }: FAQListProps) {
     <Accordion type="single" collapsible className="w-full">
       {faqs.map((faq) => (
         <AccordionItem key={faq.id} value={faq.id}>
-          <AccordionTrigger className="text-left">
+          <AccordionTrigger className="text-left hover:cursor-pointer">
             {faq.question}
           </AccordionTrigger>
           <AccordionContent className="text-gray-600">
@@ -27,4 +27,3 @@ export function FAQList({ faqs }: FAQListProps) {
     </Accordion>
   );
 }
-

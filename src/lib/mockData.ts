@@ -22,17 +22,9 @@ export interface Club {
   type: "major" | "general";
 }
 
-export interface WishlistedProject {
-  id: string;
-  clubId: string;
-  clubName: string;
-  title: string;
-  category: string;
-  description: string;
-  tags: string[];
-  status: string;
-  isRecruiting: boolean;
-  thumbnail: string;
+export interface UserWishlist {
+  userId: string;
+  clubIds: string[];
 }
 
 export const mockClubs: Club[] = [
@@ -649,45 +641,22 @@ export const mockClubs: Club[] = [
   },
 ];
 
-export const mockWishlistedProjects: WishlistedProject[] = [
+export const mockUserWishlists: UserWishlist[] = [
   {
-    id: "wish-proj-1",
-    clubId: "digital01",
-    clubName: "Digital Playground",
-    title: "AI 멀티모달 협업 노트",
-    category: "실전 프로젝트",
-    description:
-      "AI 요약과 태깅으로 팀 기록을 자동 정리하는 협업 노트 서비스를 함께 만들고 있어요.",
-    tags: ["AI", "웹앱", "협업"],
-    status: "팀 매칭 중",
-    isRecruiting: true,
-    thumbnail: "../../public/assets/digitalPlayground.png",
+    userId: "stu-2025001",
+    clubIds: ["sg01", "triples01"],
   },
   {
-    id: "wish-proj-2",
-    clubId: "ai01",
-    clubName: "AI 인식 Lab",
-    title: "실시간 객체 인식 키오스크",
-    category: "AI/컴퓨터비전",
-    description:
-      "Edge 디바이스에서 구동되는 실시간 객체 인식 키오스크를 위한 추론 엔진을 개발합니다.",
-    tags: ["Computer Vision", "Edge", "서비스"],
-    status: "데모 준비 중",
-    isRecruiting: true,
-    thumbnail: "../../public/assets/aiLab.png",
+    userId: "stu-2025002",
+    clubIds: ["ai01", "iot01"],
   },
   {
-    id: "wish-proj-3",
-    clubId: "triples01",
-    clubName: "TripleS",
-    title: "캠퍼스 라이프 캘린더",
-    category: "팀 프로젝트",
-    description:
-      "학내 행사와 공지를 통합 관리하는 모바일 캘린더 앱을 React Native로 제작합니다.",
-    tags: ["모바일", "React Native", "UX"],
-    status: "디자인 검토 중",
-    isRecruiting: false,
-    thumbnail: "../../public/assets/tripleS.png",
+    userId: "admin_club",
+    clubIds: ["digital01"],
+  },
+  {
+    userId: "default_user",
+    clubIds: ["sg01", "ai01", "digital01"],
   },
 ];
 

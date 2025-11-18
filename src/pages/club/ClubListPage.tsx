@@ -1,10 +1,11 @@
-import { useState, type CSSProperties } from "react";
+import { useState } from "react";
 import { Button } from "../../ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../ui/tabs";
 import { Users, GraduationCap, Globe } from "lucide-react";
 import { mockClubs } from "../../lib/mockData";
 import ClubGrid from "../../components/club/ClubGrid";
 import { useClubSearchStore } from "../../stores/clubSearchStore";
+import JoinUs_Background from "../../../public/assets/JoinUs_Background.png";
 
 export function ClubListPage() {
   const searchQuery = useClubSearchStore((state) => state.query);
@@ -52,10 +53,11 @@ export function ClubListPage() {
 
   const majorClubs = filteredClubs.filter((club) => club.type === "major");
   const generalClubs = filteredClubs.filter((club) => club.type === "general");
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white">
+      <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white ">
         <div className="container mx-auto px-4 py-8">
           <h1 className="mb-4">우리 학교의 모든 동아리</h1>
           <p className="mb-8 text-blue-50">

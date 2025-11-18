@@ -3,7 +3,13 @@ import { toast } from "sonner";
 
 import type { AuthUser } from "../../stores/authStore";
 import { Button } from "../../ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../../ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "../../ui/card";
 import { Input } from "../../ui/input";
 import { Label } from "../../ui/label";
 
@@ -57,7 +63,10 @@ export function ProfileTab({ user }: ProfileTabProps) {
               type="text"
               value={formData.nickname}
               onChange={(event) =>
-                setFormData((prev) => ({ ...prev, nickname: event.target.value }))
+                setFormData((prev) => ({
+                  ...prev,
+                  nickname: event.target.value,
+                }))
               }
             />
           </div>
@@ -70,7 +79,10 @@ export function ProfileTab({ user }: ProfileTabProps) {
               placeholder="20231234"
               value={formData.studentId}
               onChange={(event) =>
-                setFormData((prev) => ({ ...prev, studentId: event.target.value }))
+                setFormData((prev) => ({
+                  ...prev,
+                  studentId: event.target.value,
+                }))
               }
             />
           </div>
@@ -83,7 +95,10 @@ export function ProfileTab({ user }: ProfileTabProps) {
               placeholder="컴퓨터공학과"
               value={formData.department}
               onChange={(event) =>
-                setFormData((prev) => ({ ...prev, department: event.target.value }))
+                setFormData((prev) => ({
+                  ...prev,
+                  department: event.target.value,
+                }))
               }
             />
           </div>
@@ -101,7 +116,7 @@ export function ProfileTab({ user }: ProfileTabProps) {
             />
           </div>
 
-          <Button type="submit" className="w-full">
+          <Button type="submit" className="w-full hover:cursor-pointer">
             저장하기
           </Button>
         </form>
@@ -109,4 +124,3 @@ export function ProfileTab({ user }: ProfileTabProps) {
     </Card>
   );
 }
-

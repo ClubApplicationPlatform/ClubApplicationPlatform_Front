@@ -14,6 +14,7 @@ export function Header() {
     user: state.user,
     logout: state.logout,
   }));
+  const isAdmin = user?.role === "admin";
 
   const { query, setQuery } = useClubSearchStore();
   const location = useLocation();
@@ -35,6 +36,9 @@ export function Header() {
     { label: "알림", path: "/notifications" },
     { label: "마이페이지", path: "/mypage" },
   ];
+  const menuLinks = isAdmin
+    ? [...openMenuLinks, { label: "관리자 대시보드", path: "/admin" }]
+    : openMenuLinks;
 
   const handleMenuNavigate = (path: string) => {
     navigate(path);
@@ -65,7 +69,7 @@ export function Header() {
     <header className="sticky top-0 z-50 w-full border-b bg-white">
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
         <Link to="/clubs" className="flex items-center gap-2">
-          <img src={Logo} className="h-8 w-8 rounded-lg" />
+          <img src={Logo} className="h-8 w-8" />
           <span className="text-xl font-semibold">JoinUs</span>
         </Link>
 
@@ -94,7 +98,7 @@ export function Header() {
             <Popover open={isMenuOpen} onOpenChange={setIsMenuOpen}>
               <PopoverTrigger asChild>
                 <button
-                  className="flex h-10 w-10 items-center justify-center rounded-full border bg-white text-gray-700 shadow-sm transition hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+                  className="flex h-10 w-10 items-center justify-center rounded-full border bg-white text-gray-700 shadow-sm transition hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 hover:cursor-pointer"
                   aria-label="\uC0AC\uC6A9\uC790 \uBA54\uB274 \uC5F4\uAE30"
                 >
                   <UserRound className="h-5 w-5" />
@@ -102,11 +106,11 @@ export function Header() {
               </PopoverTrigger>
               <PopoverContent align="end" className="w-52 border-gray-200 p-2">
                 <div className="flex flex-col gap-1">
-                  {openMenuLinks.map((item) => (
+                  {menuLinks.map((item) => (
                     <button
                       key={item.label}
                       onClick={() => handleMenuNavigate(item.path)}
-                      className="rounded-md px-3 py-2 text-left text-sm text-gray-800 transition hover:bg-gray-100"
+                      className="rounded-md px-3 py-2 text-left text-sm text-gray-800 transition hover:bg-gray-100 hover:cursor-pointer"
                     >
                       {item.label}
                     </button>

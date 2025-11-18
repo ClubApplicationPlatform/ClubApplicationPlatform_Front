@@ -8,10 +8,18 @@ import { mockClubs, mockQuestions } from "../../lib/mockData";
 import { useAuthStore } from "../../stores/authStore";
 import { Button } from "../../ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "../../ui/card";
-import { Badge } from "../../ui/badge";
 import { Textarea } from "../../ui/textarea";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "../../ui/alert-dialog";
 
-const MIN_ANSWER_LENGTH = 50;
 const MAX_ANSWER_LENGTH = 300;
 
 export function ApplyPage() {
@@ -20,9 +28,12 @@ export function ApplyPage() {
   const user = useAuthStore((state) => state.user);
 
   const club = mockClubs.find((entry) => entry.id === clubId);
-  const questions = mockQuestions.filter((question) => question.clubId === clubId);
+  const questions = mockQuestions.filter(
+    (question) => question.clubId === clubId
+  );
 
   const [answers, setAnswers] = useState<Record<string, string>>({});
+  const [isConfirmOpen, setIsConfirmOpen] = useState(false);
 
   const handleAnswerChange = (questionId: string, value: string) => {
     setAnswers((prev) => ({ ...prev, [questionId]: value }));
@@ -33,25 +44,40 @@ export function ApplyPage() {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const invalid = questions.filter(
-      (question) => !answers[question.id] || answers[question.id].trim().length < MIN_ANSWER_LENGTH
+      (question) =>
+        !answers[question.id] || answers[question.id].trim().length === 0
     );
 
     if (invalid.length) {
-      toast.error("모든 질문에 50자 이상 답변해주세요.");
+      toast.error("모든 질문에 답변을 입력해주세요.");
       return;
     }
 
-    toast.success("지원서가 제출되었습니다.");
-    navigate("/my-page");
+    setIsConfirmOpen(true);
+  };
+
+  const handleConfirmSubmit = () => {
+    setIsConfirmOpen(false);
+    if (clubId) {
+      navigate(`/clubs/${club.id}/apply/success`);
+    } else {
+      navigate("/clubs");
+    }
+  };
+
+  const handleDialogOpenChange = (open: boolean) => {
+    setIsConfirmOpen(open);
   };
 
   if (!club) {
     return (
       <div className="container mx-auto px-4 py-12">
         <Card>
-          <CardContent className="py-12 text-center">
+          <CardContent className="py-12 text-center hover:cursor-pointer">
             <p className="mb-4">동아리를 찾을 수 없습니다.</p>
-            <Button onClick={() => navigate("/clubs")}>동아리 목록으로 이동</Button>
+            <Button onClick={() => navigate("/clubs")}>
+              동아리 목록으로 이동
+            </Button>
           </CardContent>
         </Card>
       </div>
@@ -80,18 +106,21 @@ export function ApplyPage() {
     >
       <div className="border-b bg-white">
         <div className="container mx-auto px-4 py-6">
-          <Button variant="ghost" onClick={() => navigate(`/clubs/${clubId}`)} className="mb-4">
+          <Button
+            variant="ghost"
+            onClick={() => navigate(`/clubs/${club.id}`)}
+            className="mb-4 hover:cursor-pointer"
+          >
             <ArrowLeft className="mr-2 h-4 w-4" />
             뒤로가기
           </Button>
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="mb-1 text-2xl font-semibold text-gray-900">지원서 작성</h1>
+              <h1 className="mb-1 text-2xl font-semibold text-gray-900">
+                지원서 작성
+              </h1>
               <p className="text-gray-600">{club.name}</p>
             </div>
-            <Badge variant="outline" className="text-sm">
-              임시 저장 가능
-            </Badge>
           </div>
         </div>
       </div>
@@ -108,10 +137,13 @@ export function ApplyPage() {
             <div className="text-sm text-blue-900">
               <p className="mb-1 font-medium">지원서 작성 안내</p>
               <ul className="list-inside list-disc space-y-1 text-blue-800">
-                <li>각 질문당 최대 {MAX_ANSWER_LENGTH}자까지 입력 가능합니다.</li>
+                <li>
+                  각 질문당 최대 {MAX_ANSWER_LENGTH}자까지 입력 가능합니다.
+                </li>
                 <li>제출 후에는 수정이 불가능하니 신중하게 작성해주세요.</li>
                 <li>
-                  마감일: <span className="font-semibold">{club.recruitDeadline}</span>
+                  마감일:{" "}
+                  <span className="font-semibold">{club.recruitDeadline}</span>
                 </li>
               </ul>
             </div>
@@ -122,11 +154,7 @@ export function ApplyPage() {
           {questions.map((question, index) => {
             const count = getCharCount(question.id);
             const countColor =
-              count > MAX_ANSWER_LENGTH
-                ? "text-red-600"
-                : count >= MIN_ANSWER_LENGTH
-                  ? "text-green-600"
-                  : "text-gray-500";
+              count > MAX_ANSWER_LENGTH ? "text-red-600" : "text-gray-500";
             return (
               <motion.div
                 key={question.id}
@@ -139,10 +167,14 @@ export function ApplyPage() {
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
                         <div className="mb-2 flex items-center gap-2">
-                          <Badge className="bg-blue-600">Q{index + 1}</Badge>
+                          <span className="rounded-full bg-blue-600 px-2 py-0.5 text-xs font-semibold text-white">
+                            Q{index + 1}
+                          </span>
                           <span className="text-sm text-gray-500">필수</span>
                         </div>
-                        <CardTitle className="text-lg">{question.question}</CardTitle>
+                        <CardTitle className="text-lg">
+                          {question.question}
+                        </CardTitle>
                       </div>
                     </div>
                   </CardHeader>
@@ -151,12 +183,13 @@ export function ApplyPage() {
                       <Textarea
                         placeholder="답변을 입력해주세요..."
                         value={answers[question.id] ?? ""}
-                        onChange={(event) => handleAnswerChange(question.id, event.target.value)}
+                        onChange={(event) =>
+                          handleAnswerChange(question.id, event.target.value)
+                        }
                         className="min-h-[200px] resize-none"
                         maxLength={MAX_ANSWER_LENGTH}
                       />
-                      <div className="flex justify-between text-sm">
-                        <span className="text-gray-500">최소 {MIN_ANSWER_LENGTH}자 이상 작성해주세요</span>
+                      <div className="flex justify-end text-sm">
                         <span className={countColor}>
                           {count} / {MAX_ANSWER_LENGTH}자
                         </span>
@@ -169,20 +202,29 @@ export function ApplyPage() {
           })}
 
           <div className="sticky bottom-0 flex gap-3 border-t bg-white p-4">
-            <Button
-              type="button"
-              variant="outline"
-              className="flex-1"
-              onClick={() => toast.success("임시 저장되었습니다.")}
-            >
-              임시 저장
-            </Button>
-            <Button type="submit" className="flex-1">
+            <Button type="submit" className="flex-1 hover:cursor-pointer">
               제출하기
             </Button>
           </div>
         </form>
       </div>
+
+      <AlertDialog open={isConfirmOpen} onOpenChange={handleDialogOpenChange}>
+        <AlertDialogContent className="sm:max-w-md">
+          <AlertDialogHeader>
+            <AlertDialogTitle>지원서를 제출할까요?</AlertDialogTitle>
+            <AlertDialogDescription>
+              제출을 누르면 더 이상 수정할 수 없습니다. 내용을 다시 한번 확인해주세요.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>수정하러 가기</AlertDialogCancel>
+            <AlertDialogAction onClick={handleConfirmSubmit}>
+              제출 확정
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </motion.div>
   );
 }

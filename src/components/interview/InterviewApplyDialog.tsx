@@ -55,10 +55,11 @@ export function InterviewApplyDialog({
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel onClick={onCancel}>취소</AlertDialogCancel>
-          <AlertDialogAction onClick={onConfirm}>확인 및 신청</AlertDialogAction>
+          <AlertDialogAction onClick={onConfirm}>
+            확인 및 신청
+          </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
   );
 }
-

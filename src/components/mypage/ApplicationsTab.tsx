@@ -10,13 +10,21 @@ interface ApplicationsTabProps {
   onNavigate: NavigateFunction;
 }
 
-export function ApplicationsTab({ applications, onNavigate }: ApplicationsTabProps) {
+export function ApplicationsTab({
+  applications,
+  onNavigate,
+}: ApplicationsTabProps) {
   if (applications.length === 0) {
     return (
       <Card>
         <CardContent className="py-20 text-center">
           <p className="mb-4 text-gray-500">아직 지원한 동아리가 없습니다.</p>
-          <Button onClick={() => onNavigate("/clubs")}>동아리 둘러보기</Button>
+          <Button
+            className="hover:cursor-pointer"
+            onClick={() => onNavigate("/clubs")}
+          >
+            동아리 둘러보기
+          </Button>
         </CardContent>
       </Card>
     );
@@ -34,4 +42,3 @@ export function ApplicationsTab({ applications, onNavigate }: ApplicationsTabPro
     </div>
   );
 }
-

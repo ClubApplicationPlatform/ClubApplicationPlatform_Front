@@ -2,7 +2,7 @@
 import { toast } from "sonner";
 
 import { Card, CardContent } from "../../ui/card";
-import { mockClubs } from "../../lib/mockData";
+import { mockClubs, mockUserWishlists } from "../../lib/mockData";
 import { WishlistGrid } from "../../components/wishlist/WishlistGrid";
 import { WishlistEmptyState } from "../../components/wishlist/WishlistEmptyState";
 import { useAuthStore } from "../../stores/authStore";
@@ -10,7 +10,14 @@ import { useAuthStore } from "../../stores/authStore";
 export function WishlistPage() {
   const navigate = useNavigate();
   const user = useAuthStore((state) => state.user);
-  const wishlistedClubs = mockClubs.slice(0, 3);
+
+  const wishlistEntry = user
+    ? mockUserWishlists.find((entry) => entry.userId === user.id) ??
+      mockUserWishlists.find((entry) => entry.userId === "default_user")
+    : null;
+  const wishlistedClubs = wishlistEntry
+    ? mockClubs.filter((club) => wishlistEntry.clubIds.includes(club.id))
+    : [];
 
   if (!user) {
     return (

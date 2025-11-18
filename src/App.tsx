@@ -16,15 +16,19 @@ import { ClubDetailPage } from "./pages/club/ClubDetailPage";
 import { WishlistPage } from "./pages/club/WishlistPage";
 import { ApplicationDetailPage } from "./pages/application/ApplicationDetailPage";
 import { ApplyPage } from "./pages/application/ApplyPage";
+import { ApplicationSuccessPage } from "./pages/application/ApplicationSuccessPage";
 import { MyApplicationsPage } from "./pages/application/MyApplicationsPage";
 import { InterviewSelectPage } from "./pages/application/InterviewSelectPage";
 import { MyPage } from "./pages/account/MyPage";
 import { NotificationCenter } from "./pages/account/NotificationCenter";
 import { FAQPage } from "./pages/faq/FAQPage";
 import { NoticePage } from "./pages/notice/NoticePage";
+import { AdminDashboardPage } from "./pages/admin/AdminDashboardPage";
+import { useAuthStore } from "./stores/authStore";
 
 function AppContainer() {
   const location = useLocation();
+  const user = useAuthStore((state) => state.user);
   const hideHeader = ["/login", "/signup"].includes(location.pathname);
 
   return (
@@ -42,6 +46,10 @@ function AppContainer() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/clubs/:clubId/manage" element={<ClubManagerPage />} />
         <Route path="/clubs/:clubId/apply" element={<ApplyPage />} />
+        <Route
+          path="/clubs/:clubId/apply/success"
+          element={<ApplicationSuccessPage />}
+        />
         <Route path="/clubs/:clubId/interview" element={<InterviewSelectPage />} />
         <Route path="/wishlist" element={<WishlistPage />} />
         <Route path="/applications/:applicationId" element={<ApplicationDetailPage />} />
@@ -50,6 +58,16 @@ function AppContainer() {
         <Route path="/notifications" element={<NotificationCenter />} />
         <Route path="/faq" element={<FAQPage />} />
         <Route path="/notices" element={<NoticePage />} />
+        <Route
+          path="/admin"
+          element={
+            user?.role === "admin" ? (
+              <AdminDashboardPage />
+            ) : (
+              <Navigate to={user ? "/clubs" : "/login"} replace />
+            )
+          }
+        />
         <Route path="*" element={<Navigate to="/clubs" replace />} />
       </Routes>
     </div>

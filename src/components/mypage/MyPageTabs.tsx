@@ -20,7 +20,7 @@ export function MyPageTabs({ tabs, activeTab, onChange }: MyPageTabsProps) {
           type="button"
           onClick={() => onChange(tab.id)}
           className={cn(
-            "rounded-md px-3 py-2 text-center text-sm font-medium transition-all",
+            "rounded-md px-3 py-2 text-center text-sm font-medium transition-all hover:cursor-pointer",
             activeTab === tab.id ? "bg-white shadow-sm" : "hover:bg-gray-200"
           )}
         >
@@ -30,4 +30,3 @@ export function MyPageTabs({ tabs, activeTab, onChange }: MyPageTabsProps) {
     </div>
   );
 }
-

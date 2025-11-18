@@ -67,18 +67,23 @@ export function WishlistClubCard({
         </p>
 
         <div className="flex gap-2">
-          <Button onClick={(event) => { event.stopPropagation(); handleView(); }} className="flex-1">
+          <Button
+            onClick={(event) => {
+              event.stopPropagation();
+              handleView();
+            }}
+            className="flex-1"
+          >
             상세보기
           </Button>
-          {club.isRecruiting && (
-            <Button
-              onClick={handleApply}
-              variant="outline"
-              className="flex-1"
-            >
-              지원하기
-            </Button>
-          )}
+          <Button
+            onClick={handleApply}
+            variant="outline"
+            className="flex-1"
+            disabled={!club.isRecruiting}
+          >
+            {club.isRecruiting ? "지원하기" : "모집 마감"}
+          </Button>
         </div>
       </CardContent>
     </Card>
