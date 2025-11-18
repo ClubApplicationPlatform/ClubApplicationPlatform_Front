@@ -10,7 +10,12 @@ import { Card, CardContent, CardHeader, CardTitle } from "../../ui/card";
 import { Button } from "../../ui/button";
 import { Badge } from "../../ui/badge";
 
-type ApplicationStatus = "pending" | "document_passed" | "interview_scheduled" | "accepted" | "rejected";
+type ApplicationStatus =
+  | "pending"
+  | "document_passed"
+  | "interview_scheduled"
+  | "accepted"
+  | "rejected";
 
 export function ApplicationDetailPage() {
   const { applicationId } = useParams();
@@ -21,11 +26,15 @@ export function ApplicationDetailPage() {
     () => mockApplications.find((item) => item.id === applicationId),
     [applicationId]
   );
-  const club = application ? mockClubs.find((item) => item.id === application.clubId) : null;
+  const club = application
+    ? mockClubs.find((item) => item.id === application.clubId)
+    : null;
   const isAdmin = Boolean(club && user && club.adminId === user.id);
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [pendingStatus, setPendingStatus] = useState<ApplicationStatus | "">("");
+  const [pendingStatus, setPendingStatus] = useState<ApplicationStatus | "">(
+    ""
+  );
 
   const openConfirm = (status: ApplicationStatus) => {
     setPendingStatus(status);
@@ -57,7 +66,9 @@ export function ApplicationDetailPage() {
         <Card>
           <CardContent className="py-12 text-center">
             <p className="mb-4">로그인이 필요합니다.</p>
-            <Button onClick={() => navigate("/login")}>로그인 페이지로 이동</Button>
+            <Button onClick={() => navigate("/login")}>
+              로그인 페이지로 이동
+            </Button>
           </CardContent>
         </Card>
       </div>
@@ -70,7 +81,9 @@ export function ApplicationDetailPage() {
         <Card>
           <CardContent className="py-12 text-center">
             <p className="mb-4">지원서를 찾을 수 없습니다.</p>
-            <Button onClick={() => navigate("/my-page")}>마이페이지로 돌아가기</Button>
+            <Button onClick={() => navigate("/my-page")}>
+              마이페이지로 돌아가기
+            </Button>
           </CardContent>
         </Card>
       </div>
@@ -88,15 +101,34 @@ export function ApplicationDetailPage() {
   const getStatusBadge = (status: ApplicationStatus) => {
     switch (status) {
       case "pending":
-        return <Badge variant="outline" className="border-yellow-500 text-yellow-700">서류 검토중</Badge>;
+        return (
+          <Badge
+            variant="outline"
+            className="border-yellow-500 text-yellow-700"
+          >
+            서류 검토중
+          </Badge>
+        );
       case "document_passed":
-        return <Badge variant="outline" className="border-green-500 text-green-700">서류 합격</Badge>;
+        return (
+          <Badge variant="outline" className="border-green-500 text-green-700">
+            서류 합격
+          </Badge>
+        );
       case "interview_scheduled":
-        return <Badge variant="outline" className="border-blue-500 text-blue-700">면접 예정</Badge>;
+        return (
+          <Badge variant="outline" className="border-blue-500 text-blue-700">
+            면접 예정
+          </Badge>
+        );
       case "accepted":
         return <Badge className="bg-green-600">합격</Badge>;
       case "rejected":
-        return <Badge variant="outline" className="border-gray-400 text-gray-600">불합격</Badge>;
+        return (
+          <Badge variant="outline" className="border-gray-400 text-gray-600">
+            불합격
+          </Badge>
+        );
       default:
         return null;
     }
@@ -121,7 +153,9 @@ export function ApplicationDetailPage() {
                 <CardTitle className="text-lg">{answer.question}</CardTitle>
               </div>
             </CardHeader>
-            <CardContent className="pt-4 text-gray-700 whitespace-pre-wrap">{answer.answer}</CardContent>
+            <CardContent className="pt-4 text-gray-700 whitespace-pre-wrap">
+              {answer.answer}
+            </CardContent>
           </Card>
         ))}
       </div>
@@ -130,7 +164,11 @@ export function ApplicationDetailPage() {
 
   return (
     <div className="container mx-auto max-w-3xl px-4 py-12">
-      <Button variant="ghost" onClick={goBack} className="mb-6">
+      <Button
+        variant="ghost"
+        onClick={goBack}
+        className="mb-6  hover:cursor-pointer"
+      >
         <ArrowLeft className="mr-2 h-4 w-4" />
         {isAdmin ? "신청자 관리로 돌아가기" : "마이페이지로 돌아가기"}
       </Button>
@@ -139,8 +177,12 @@ export function ApplicationDetailPage() {
         <CardHeader>
           <div className="flex flex-wrap items-start justify-between gap-3">
             <div>
-              <CardTitle className="mb-2">{application.clubName} 지원서</CardTitle>
-              <p className="text-sm text-gray-600">지원일: {application.appliedAt}</p>
+              <CardTitle className="mb-2">
+                {application.clubName} 지원서
+              </CardTitle>
+              <p className="text-sm text-gray-600">
+                지원일: {application.appliedAt}
+              </p>
             </div>
             {getStatusBadge(application.status as ApplicationStatus)}
           </div>
@@ -148,7 +190,9 @@ export function ApplicationDetailPage() {
 
         <CardContent className="space-y-6">
           <section>
-            <h3 className="mb-3 text-lg font-semibold text-gray-900">지원자 정보</h3>
+            <h3 className="mb-3 text-lg font-semibold text-gray-900">
+              지원자 정보
+            </h3>
             <div className="grid gap-3 rounded-lg bg-gray-50 p-4 md:grid-cols-2">
               <InfoRow label="이름">{application.applicantName}</InfoRow>
               <InfoRow label="학번">{application.studentId}</InfoRow>
@@ -158,36 +202,47 @@ export function ApplicationDetailPage() {
           </section>
 
           <section>
-            <h3 className="mb-3 text-lg font-semibold text-gray-900">자기소개 및 문항 답변</h3>
+            <h3 className="mb-3 text-lg font-semibold text-gray-900">
+              자기소개 및 문항 답변
+            </h3>
             {renderAnswerSection()}
           </section>
 
           {application.status === "pending" && (
             <section>
-              <h3 className="mb-3 text-lg font-semibold text-gray-900">면접 가능 시간</h3>
+              <h3 className="mb-3 text-lg font-semibold text-gray-900">
+                면접 가능 시간
+              </h3>
               <div className="rounded-lg bg-gray-50 p-4 text-gray-700">
                 평일 오후 6시 이후, 주말 오전/오후 모두 가능
               </div>
             </section>
           )}
 
-          {application.status === "interview_scheduled" && application.interviewSlot && (
-            <section className="rounded-lg bg-blue-50 p-4">
-              <h3 className="mb-2 text-lg font-semibold text-blue-900">면접 일정</h3>
-              <p className="text-blue-800">{application.interviewSlot}</p>
-            </section>
-          )}
+          {application.status === "interview_scheduled" &&
+            application.interviewSlot && (
+              <section className="rounded-lg bg-blue-50 p-4">
+                <h3 className="mb-2 text-lg font-semibold text-blue-900">
+                  면접 일정
+                </h3>
+                <p className="text-blue-800">{application.interviewSlot}</p>
+              </section>
+            )}
 
           {application.status === "accepted" && application.result && (
             <section className="rounded-lg bg-green-50 p-4">
-              <h3 className="mb-2 text-lg font-semibold text-green-900">합격 안내</h3>
+              <h3 className="mb-2 text-lg font-semibold text-green-900">
+                합격 안내
+              </h3>
               <p className="text-green-800">{application.result.message}</p>
             </section>
           )}
 
           {application.status === "rejected" && application.result && (
             <section className="rounded-lg bg-gray-50 p-4">
-              <h3 className="mb-2 text-lg font-semibold text-gray-900">심사 결과</h3>
+              <h3 className="mb-2 text-lg font-semibold text-gray-900">
+                심사 결과
+              </h3>
               <p className="text-gray-700">{application.result.message}</p>
             </section>
           )}
@@ -199,7 +254,11 @@ export function ApplicationDetailPage() {
             />
           ) : (
             <div className="flex flex-col gap-2 pt-4 sm:flex-row">
-              <Button variant="outline" onClick={() => navigate(`/clubs/${application.clubId}`)} className="flex-1">
+              <Button
+                variant="outline"
+                onClick={() => navigate(`/clubs/${application.clubId}`)}
+                className="flex-1"
+              >
                 동아리 페이지
               </Button>
               <Button onClick={() => navigate("/my-page")} className="flex-1">
@@ -243,11 +302,18 @@ function AdminActions({
     <div className="space-y-3 pt-4">
       {status === "pending" && (
         <>
-          <Button onClick={() => onStatusChange("document_passed")} className="w-full bg-green-600 hover:bg-green-700">
+          <Button
+            onClick={() => onStatusChange("document_passed")}
+            className="w-full bg-green-600 hover:bg-green-700 hover:cursor-pointer"
+          >
             <Check className="mr-2 h-4 w-4" />
             서류 합격 처리
           </Button>
-          <Button variant="destructive" onClick={() => onStatusChange("rejected")} className="w-full">
+          <Button
+            variant="destructive"
+            onClick={() => onStatusChange("rejected")}
+            className="w-full hover:cursor-pointer"
+          >
             <X className="mr-2 h-4 w-4" />
             불합격 처리
           </Button>
@@ -255,7 +321,11 @@ function AdminActions({
       )}
 
       {status === "document_passed" && (
-        <Button variant="destructive" onClick={() => onStatusChange("rejected")} className="w-full">
+        <Button
+          variant="destructive"
+          onClick={() => onStatusChange("rejected")}
+          className="w-full"
+        >
           <X className="mr-2 h-4 w-4" />
           불합격 처리
         </Button>
@@ -263,11 +333,18 @@ function AdminActions({
 
       {status === "interview_scheduled" && (
         <>
-          <Button onClick={() => onStatusChange("accepted")} className="w-full bg-green-600 hover:bg-green-700">
+          <Button
+            onClick={() => onStatusChange("accepted")}
+            className="w-full bg-green-600 hover:bg-green-700"
+          >
             <Check className="mr-2 h-4 w-4" />
             최종 합격 처리
           </Button>
-          <Button variant="destructive" onClick={() => onStatusChange("rejected")} className="w-full">
+          <Button
+            variant="destructive"
+            onClick={() => onStatusChange("rejected")}
+            className="w-full"
+          >
             <X className="mr-2 h-4 w-4" />
             불합격 처리
           </Button>

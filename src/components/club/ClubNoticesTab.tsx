@@ -119,7 +119,10 @@ export function ClubNoticesTab({ notices }: ClubNoticesTabProps) {
                         </Label>
                       </div>
                       <div className="flex gap-2">
-                        <Button onClick={handleSaveEditNotice} className="flex-1">
+                        <Button
+                          onClick={handleSaveEditNotice}
+                          className="flex-1"
+                        >
                           저장
                         </Button>
                         <Button
@@ -141,16 +144,20 @@ export function ClubNoticesTab({ notices }: ClubNoticesTabProps) {
                           <h3>{notice.title}</h3>
                         </div>
                         <div className="flex items-center gap-2">
-                          <span className="text-sm text-gray-500">{notice.date}</span>
+                          <span className="text-sm text-gray-500">
+                            {notice.date}
+                          </span>
                           <Button
                             variant="ghost"
                             size="icon"
+                            className=" hover:cursor-pointer"
                             onClick={() => handleEditNotice(notice)}
                           >
                             <Edit2 className="h-4 w-4 text-blue-600" />
                           </Button>
                           <Button
                             variant="ghost"
+                            className=" hover:cursor-pointer"
                             size="icon"
                             onClick={() => handleDeleteNotice(notice.id)}
                           >
@@ -200,6 +207,7 @@ export function ClubNoticesTab({ notices }: ClubNoticesTabProps) {
           <div className="flex items-center space-x-2">
             <Checkbox
               id="isImportant"
+              className=" hover:cursor-pointer"
               checked={isImportant}
               onCheckedChange={(checked) => setIsImportant(checked as boolean)}
             />
@@ -208,7 +216,10 @@ export function ClubNoticesTab({ notices }: ClubNoticesTabProps) {
             </Label>
           </div>
 
-          <Button onClick={handleAddNotice} className="w-full">
+          <Button
+            onClick={handleAddNotice}
+            className="w-full hover:cursor-pointer"
+          >
             <Plus className="mr-2 h-4 w-4" />
             공지사항 등록
           </Button>

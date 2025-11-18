@@ -66,7 +66,7 @@ export function ApplicationSuccessPage() {
                 <p className="text-sm text-blue-700">{club.shortDescription}</p>
                 <Button
                   variant="link"
-                  className="mt-2 p-0 text-blue-700"
+                  className="mt-2 p-0 text-blue-700 hover:cursor-pointer"
                   onClick={handleGoToClub}
                 >
                   동아리 상세 페이지로 이동 →
@@ -77,13 +77,13 @@ export function ApplicationSuccessPage() {
             <div className="grid gap-3 md:grid-cols-2">
               <Button
                 variant="secondary"
-                className="h-14 text-base"
+                className="h-14 text-base hover:cursor-pointer"
                 onClick={handleExplore}
               >
                 다른 동아리 둘러보기
               </Button>
               <Button
-                className="h-14 text-base"
+                className="h-14 text-base hover:cursor-pointer"
                 onClick={handleViewApplications}
               >
                 내 지원 정보 보기

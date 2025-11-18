@@ -36,13 +36,21 @@ export function InterviewSlotForm({
         <Label>날짜</Label>
         <Popover>
           <PopoverTrigger asChild>
-            <Button variant="outline" className="w-full justify-start">
+            <Button
+              variant="outline"
+              className="w-full justify-start hover:cursor-pointer"
+            >
               <CalendarIcon className="mr-2 h-4 w-4" />
               {date ? format(date, "PPP") : "날짜 선택"}
             </Button>
           </PopoverTrigger>
           <PopoverContent className="w-auto p-0" align="start">
-            <Calendar mode="single" selected={date} onSelect={onDateChange} initialFocus />
+            <Calendar
+              mode="single"
+              selected={date}
+              onSelect={onDateChange}
+              initialFocus
+            />
           </PopoverContent>
         </Popover>
       </div>
@@ -80,11 +88,10 @@ export function InterviewSlotForm({
         />
       </div>
 
-      <Button onClick={onSubmit} className="w-full">
+      <Button onClick={onSubmit} className="w-full hover:cursor-pointer">
         <Plus className="mr-2 h-4 w-4" />
         면접 시간 추가
       </Button>
     </div>
   );
 }
-

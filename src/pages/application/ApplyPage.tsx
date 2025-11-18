@@ -210,16 +210,22 @@ export function ApplyPage() {
       </div>
 
       <AlertDialog open={isConfirmOpen} onOpenChange={handleDialogOpenChange}>
-        <AlertDialogContent className="sm:max-w-md">
+        <AlertDialogContent className="w-[min(90vw,420px)]">
           <AlertDialogHeader>
             <AlertDialogTitle>지원서를 제출할까요?</AlertDialogTitle>
             <AlertDialogDescription>
-              제출을 누르면 더 이상 수정할 수 없습니다. 내용을 다시 한번 확인해주세요.
+              제출을 누르면 더 이상 수정할 수 없습니다. 내용을 다시 한번
+              확인해주세요.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>수정하러 가기</AlertDialogCancel>
-            <AlertDialogAction onClick={handleConfirmSubmit}>
+            <AlertDialogCancel className="hover:cursor-pointer">
+              수정하러 가기
+            </AlertDialogCancel>
+            <AlertDialogAction
+              className="hover:cursor-pointer"
+              onClick={handleConfirmSubmit}
+            >
               제출 확정
             </AlertDialogAction>
           </AlertDialogFooter>

@@ -91,14 +91,19 @@ export function ClubApplicationsTab({
                   지원일: {application.appliedAt}
                 </p>
               </div>
-              <Button onClick={() => onSelectApplication(application.id)}>
+              <Button
+                className=" hover:cursor-pointer"
+                onClick={() => onSelectApplication(application.id)}
+              >
                 상세보기
               </Button>
             </div>
           ))}
 
           {applications.length === 0 && (
-            <div className="py-12 text-center text-gray-500">아직 지원자가 없습니다.</div>
+            <div className="py-12 text-center text-gray-500">
+              아직 지원자가 없습니다.
+            </div>
           )}
         </div>
       </CardContent>

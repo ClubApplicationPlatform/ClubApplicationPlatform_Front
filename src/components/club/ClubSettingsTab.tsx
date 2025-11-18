@@ -60,7 +60,9 @@ export function ClubSettingsTab({
                 {club.isRecruiting ? "모집 중입니다" : "모집이 종료되었습니다"}
               </p>
             </div>
-            <Badge className={club.isRecruiting ? "bg-green-600" : "bg-gray-400"}>
+            <Badge
+              className={club.isRecruiting ? "bg-green-600" : "bg-gray-400"}
+            >
               {club.isRecruiting ? "모집중" : "모집 마감"}
             </Badge>
           </div>
@@ -70,25 +72,36 @@ export function ClubSettingsTab({
               <div>
                 <h3 className="mb-1 text-red-900">모집 종료</h3>
                 <p className="text-sm text-red-700">
-                  모집을 종료하면 지원자에게 알림을 보낼 수 있습니다. 신중하게 결정해주세요.
+                  모집을 종료하면 지원자에게 알림을 보낼 수 있습니다. 신중하게
+                  결정해주세요.
                 </p>
               </div>
               <div className="flex items-center space-x-2">
                 <Checkbox
                   id="notifyApplicants"
+                  className=" hover:cursor-pointer"
                   checked={notifyApplicants}
-                  onCheckedChange={(checked) => setNotifyApplicants(checked as boolean)}
+                  onCheckedChange={(checked) =>
+                    setNotifyApplicants(checked as boolean)
+                  }
                 />
-                <Label htmlFor="notifyApplicants" className="cursor-pointer text-sm text-red-900">
+                <Label
+                  htmlFor="notifyApplicants"
+                  className="cursor-pointer text-sm text-red-900 hover:cursor-pointer"
+                >
                   지원자에게 알림 보내기
                 </Label>
               </div>
-              <Button onClick={handleCloseRecruitment} variant="destructive" className="w-full">
+              <Button
+                onClick={handleCloseRecruitment}
+                variant="destructive"
+                className="w-full hover:cursor-pointer"
+              >
                 모집 종료하기
               </Button>
             </div>
           ) : (
-            <div className="space-y-4 rounded-lg border border-green-200 bg-green-50 p-4">
+            <div className="space-y-4 rounded-lg border border-green-200 bg-green-50 p-4 hover:cursor-pointer">
               <div>
                 <h3 className="mb-1 text-green-900">모집 시작</h3>
                 <p className="text-sm text-green-700">
@@ -98,7 +111,7 @@ export function ClubSettingsTab({
               </div>
               <Button
                 onClick={handleStartRecruitment}
-                className="w-full bg-green-600 hover:bg-green-700"
+                className="w-full bg-green-600 hover:bg-green-700 hover:cursor-pointer"
               >
                 모집 시작하기
               </Button>
@@ -116,17 +129,31 @@ export function ClubSettingsTab({
             <Label htmlFor="deadline">마감일</Label>
             <Popover>
               <PopoverTrigger asChild>
-                <Button variant="outline" className="w-full justify-start">
+                <Button
+                  variant="outline"
+                  className="w-full justify-start hover:cursor-pointer"
+                >
                   <CalendarIcon className="mr-2 h-4 w-4" />
                   {deadline ? format(deadline, "PPP") : "날짜 선택"}
                 </Button>
               </PopoverTrigger>
-              <PopoverContent className="w-auto p-0" align="start">
-                <Calendar mode="single" selected={deadline} onSelect={setDeadline} initialFocus />
+              <PopoverContent
+                className="w-auto p-0 hover:cursor-pointer"
+                align="start"
+              >
+                <Calendar
+                  mode="single"
+                  selected={deadline}
+                  onSelect={setDeadline}
+                  initialFocus
+                />
               </PopoverContent>
             </Popover>
           </div>
-          <Button onClick={handleSetDeadline} className="w-full">
+          <Button
+            onClick={handleSetDeadline}
+            className="w-full hover:cursor-pointer"
+          >
             마감일 저장
           </Button>
         </CardContent>
@@ -137,7 +164,10 @@ export function ClubSettingsTab({
           <CardTitle>면접 일정 관리</CardTitle>
         </CardHeader>
         <CardContent>
-          <Button onClick={onNavigateInterview} className="w-full">
+          <Button
+            onClick={onNavigateInterview}
+            className="w-full hover:cursor-pointer"
+          >
             면접 일정 설정하기
           </Button>
         </CardContent>

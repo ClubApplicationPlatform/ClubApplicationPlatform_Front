@@ -82,19 +82,22 @@ export function ClubManagerPage() {
 
       <Tabs defaultValue="applications" className="w-full">
         <TabsList className="w-full justify-start">
-          <TabsTrigger value="applications" className="gap-2">
+          <TabsTrigger
+            value="applications"
+            className="gap-2 hover:cursor-pointer"
+          >
             <ClipboardList className="h-4 w-4" />
             지원자 관리
           </TabsTrigger>
-          <TabsTrigger value="notices" className="gap-2">
+          <TabsTrigger value="notices" className="gap-2 hover:cursor-pointer">
             <Bell className="h-4 w-4" />
             공지사항
           </TabsTrigger>
-          <TabsTrigger value="questions" className="gap-2">
+          <TabsTrigger value="questions" className="gap-2 hover:cursor-pointer">
             <Users className="h-4 w-4" />
             질문 설정
           </TabsTrigger>
-          <TabsTrigger value="settings" className="gap-2">
+          <TabsTrigger value="settings" className="gap-2 hover:cursor-pointer">
             <CalendarIcon className="h-4 w-4" />
             모집 설정
           </TabsTrigger>

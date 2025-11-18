@@ -118,7 +118,7 @@ export function Header() {
                   <div className="my-1 border-t border-gray-100" />
                   <button
                     onClick={handleMenuLogout}
-                    className="rounded-md px-3 py-2 text-left text-sm text-red-600 transition hover:bg-red-50"
+                    className="rounded-md px-3 py-2 text-left text-sm text-red-600 transition hover:bg-red-50 hover:cursor-pointer"
                   >
                     로그아웃
                   </button>

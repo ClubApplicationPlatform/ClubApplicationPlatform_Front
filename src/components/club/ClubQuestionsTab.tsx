@@ -166,7 +166,9 @@ export function ClubQuestionsTab({
     <Card>
       <CardHeader>
         <CardTitle>지원서 질문 관리</CardTitle>
-        <p className="mt-2 text-sm text-gray-600">질문을 드래그해서 순서를 변경할 수 있어요.</p>
+        <p className="mt-2 text-sm text-gray-600">
+          질문을 드래그해서 순서를 변경할 수 있어요.
+        </p>
       </CardHeader>
       <CardContent className="space-y-6">
         {editingQuestion ? (
@@ -181,7 +183,9 @@ export function ClubQuestionsTab({
                 onChange={(e) => setEditQuestionText(e.target.value)}
                 maxLength={300}
               />
-              <p className="text-sm text-gray-500">{editQuestionText.length} / 300자</p>
+              <p className="text-sm text-gray-500">
+                {editQuestionText.length} / 300자
+              </p>
             </div>
             <div className="space-y-2">
               <Label htmlFor="editMaxLength">답변 최대 글자수 (100-1000)</Label>
@@ -196,13 +200,16 @@ export function ClubQuestionsTab({
               />
             </div>
             <div className="flex gap-2">
-              <Button onClick={handleSaveEditQuestion} className="flex-1">
+              <Button
+                onClick={handleSaveEditQuestion}
+                className="flex-1 hover:cursor-pointer"
+              >
                 저장
               </Button>
               <Button
                 onClick={handleCancelEditQuestion}
                 variant="outline"
-                className="flex-1"
+                className="flex-1 hover:cursor-pointer"
               >
                 취소
               </Button>
@@ -215,7 +222,10 @@ export function ClubQuestionsTab({
           collisionDetection={closestCenter}
           onDragEnd={handleDragEnd}
         >
-          <SortableContext items={sortedQuestionIds} strategy={verticalListSortingStrategy}>
+          <SortableContext
+            items={sortedQuestionIds}
+            strategy={verticalListSortingStrategy}
+          >
             <div className="space-y-3">
               {questionsList.map((question, index) => (
                 <SortableQuestionItem
@@ -246,7 +256,9 @@ export function ClubQuestionsTab({
               onChange={(e) => setNewQuestion(e.target.value)}
               maxLength={300}
             />
-            <p className="text-sm text-gray-500">{newQuestion.length} / 300자</p>
+            <p className="text-sm text-gray-500">
+              {newQuestion.length} / 300자
+            </p>
           </div>
           <div className="space-y-2">
             <Label htmlFor="newMaxLength">답변 최대 글자수 (100-1000)</Label>
@@ -263,7 +275,10 @@ export function ClubQuestionsTab({
               지원자가 답변을 작성할 때의 최대 글자수 제한입니다.
             </p>
           </div>
-          <Button onClick={handleAddQuestion} className="w-full">
+          <Button
+            onClick={handleAddQuestion}
+            className="w-full hover:cursor-pointer"
+          >
             <Plus className="mr-2 h-4 w-4" />
             질문 추가
           </Button>
@@ -286,9 +301,10 @@ function SortableQuestionItem({
   onDelete,
   onEdit,
 }: SortableQuestionItemProps) {
-  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({
-    id: question.id,
-  });
+  const { attributes, listeners, setNodeRef, transform, transition } =
+    useSortable({
+      id: question.id,
+    });
 
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -318,10 +334,20 @@ function SortableQuestionItem({
         <p className="text-gray-700">{question.question}</p>
       </div>
       <div className="flex gap-1">
-        <Button variant="ghost" size="icon" onClick={() => onEdit(question)}>
+        <Button
+          variant="ghost"
+          size="icon"
+          className=" hover:cursor-pointer"
+          onClick={() => onEdit(question)}
+        >
           <Edit2 className="h-4 w-4 text-blue-600" />
         </Button>
-        <Button variant="ghost" size="icon" onClick={() => onDelete(question.id)}>
+        <Button
+          variant="ghost"
+          size="icon"
+          className=" hover:cursor-pointer"
+          onClick={() => onDelete(question.id)}
+        >
           <Trash2 className="h-4 w-4 text-red-600" />
         </Button>
       </div>
