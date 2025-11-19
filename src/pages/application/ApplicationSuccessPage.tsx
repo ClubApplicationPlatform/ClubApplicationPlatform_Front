@@ -6,15 +6,19 @@ import { CheckCircle2 } from "lucide-react";
 import { mockClubs } from "../../lib/mockData";
 import { Button } from "../../ui/button";
 import { Card, CardContent } from "../../ui/card";
+import { useActiveCampus } from "../../hooks/useActiveCampus";
 
 export function ApplicationSuccessPage() {
   const { clubId } = useParams();
   const navigate = useNavigate();
+  const campus = useActiveCampus();
 
   const club = useMemo(
     () => mockClubs.find((entry) => entry.id === clubId),
     [clubId]
   );
+  const canDisplayClub =
+    club && campus ? club.campusId === campus.id : Boolean(club);
 
   const handleExplore = () => {
     navigate("/clubs");
@@ -25,11 +29,11 @@ export function ApplicationSuccessPage() {
   };
 
   const handleGoToClub = () => {
-    if (club) {
+    if (canDisplayClub && club) {
       navigate(`/clubs/${club.id}`);
-    } else {
-      navigate("/clubs");
+      return;
     }
+    navigate("/clubs");
   };
 
   return (
@@ -48,16 +52,16 @@ export function ApplicationSuccessPage() {
 
             <div className="space-y-3">
               <h1 className="text-3xl font-semibold text-slate-900">
-                제출이 완료되었습니다!
+                지원이 완료되었어요!
               </h1>
               <p className="text-base text-slate-600">
-                {club
-                  ? `${club.name} 지원서가 정상적으로 접수되었으며, 곧 결과가 안내될 예정입니다.`
-                  : "지원서가 정상적으로 접수되었습니다. 결과는 마이페이지에서 확인하실 수 있어요."}
+                {canDisplayClub && club
+                  ? `${club.name} 지원서가 정상적으로 제출되었으며, 결과가 안내될 때까지 기다려 주세요.`
+                  : "지원서가 정상적으로 제출되었습니다. 결과는 마이페이지에서 확인할 수 있어요."}
               </p>
             </div>
 
-            {club && (
+            {canDisplayClub && club && (
               <div className="rounded-xl border border-blue-100 bg-blue-50 p-5 text-left">
                 <p className="text-sm font-semibold text-blue-700">
                   지원 중인 동아리
@@ -69,7 +73,7 @@ export function ApplicationSuccessPage() {
                   className="mt-2 p-0 text-blue-700 hover:cursor-pointer"
                   onClick={handleGoToClub}
                 >
-                  동아리 상세 페이지로 이동 →
+                  동아리 소개 페이지로 이동
                 </Button>
               </div>
             )}
@@ -86,7 +90,7 @@ export function ApplicationSuccessPage() {
                 className="h-14 text-base hover:cursor-pointer"
                 onClick={handleViewApplications}
               >
-                내 지원 정보 보기
+                내 지원 현황 보기
               </Button>
             </div>
           </CardContent>

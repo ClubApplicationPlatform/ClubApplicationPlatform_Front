@@ -15,11 +15,13 @@ import { ClubNoticesTab } from "../../components/club/ClubNoticesTab";
 import { ClubQuestionsTab } from "../../components/club/ClubQuestionsTab";
 import { ClubSettingsTab } from "../../components/club/ClubSettingsTab";
 import { useAuthStore } from "../../stores/authStore";
+import { useActiveCampus } from "../../hooks/useActiveCampus";
 
 export function ClubManagerPage() {
   const { clubId } = useParams();
   const navigate = useNavigate();
   const user = useAuthStore((state) => state.user);
+  const campus = useActiveCampus();
   const club = mockClubs.find((c) => c.id === clubId);
 
   const applications = mockApplications.filter((a) => a.clubId === clubId);
@@ -46,6 +48,21 @@ export function ClubManagerPage() {
         <Card>
           <CardContent className="py-12 text-center">
             <p>로그인이 필요합니다.</p>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  if (club && campus && club.campusId !== campus.id) {
+    return (
+      <div className="container mx-auto px-4 py-12">
+        <Card>
+          <CardContent className="py-12 text-center">
+            <p className="mb-2">해당 학교 동아리만 관리할 수 있어요.</p>
+            <Button onClick={() => navigate("/clubs")} className="mt-4">
+              목록으로 이동
+            </Button>
           </CardContent>
         </Card>
       </div>

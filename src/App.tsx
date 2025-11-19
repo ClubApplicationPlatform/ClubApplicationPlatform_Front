@@ -35,15 +35,27 @@ function AppContainer() {
     <div className="min-h-screen bg-gray-50">
       {!hideHeader && <Header />}
       <Routes>
-        <Route path="/" element={<Navigate to="/clubs" replace />} />
+        <Route
+          path="/"
+          element={<Navigate to={user ? "/clubs" : "/login"} replace />}
+        />
         <Route
           path="/preview_page.html"
-          element={<Navigate to="/clubs" replace />}
+          element={<Navigate to={user ? "/clubs" : "/login"} replace />}
         />
-        <Route path="/clubs" element={<ClubListPage />} />
-        <Route path="/signup" element={<SignupPage />} />
+        <Route
+          path="/clubs"
+          element={user ? <ClubListPage /> : <Navigate to="/login" replace />}
+        />
+        <Route
+          path="/signup"
+          element={user ? <Navigate to="/clubs" replace /> : <SignupPage />}
+        />
         <Route path="/clubs/:clubId" element={<ClubDetailPage />} />
-        <Route path="/login" element={<LoginPage />} />
+        <Route
+          path="/login"
+          element={user ? <Navigate to="/clubs" replace /> : <LoginPage />}
+        />
         <Route path="/clubs/:clubId/manage" element={<ClubManagerPage />} />
         <Route path="/clubs/:clubId/apply" element={<ApplyPage />} />
         <Route

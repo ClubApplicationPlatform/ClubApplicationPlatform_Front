@@ -6,6 +6,7 @@ import { toast } from "sonner";
 
 import { mockClubs, mockQuestions } from "../../lib/mockData";
 import { useAuthStore } from "../../stores/authStore";
+import { useActiveCampus } from "../../hooks/useActiveCampus";
 import { Button } from "../../ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "../../ui/card";
 import { Textarea } from "../../ui/textarea";
@@ -26,6 +27,7 @@ export function ApplyPage() {
   const { clubId } = useParams();
   const navigate = useNavigate();
   const user = useAuthStore((state) => state.user);
+  const campus = useActiveCampus();
 
   const club = mockClubs.find((entry) => entry.id === clubId);
   const questions = mockQuestions.filter(
@@ -59,7 +61,7 @@ export function ApplyPage() {
   const handleConfirmSubmit = () => {
     setIsConfirmOpen(false);
     if (clubId) {
-      navigate(`/clubs/${club.id}/apply/success`);
+      navigate(`/clubs/${clubId}/apply/success`);
     } else {
       navigate("/clubs");
     }
@@ -78,6 +80,19 @@ export function ApplyPage() {
             <Button onClick={() => navigate("/clubs")}>
               동아리 목록으로 이동
             </Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  if (campus && club.campusId !== campus.id) {
+    return (
+      <div className="container mx-auto px-4 py-12">
+        <Card>
+          <CardContent className="py-12 text-center">
+            <p className="mb-4">해당 학교 동아리에만 지원할 수 있어요.</p>
+            <Button onClick={() => navigate("/clubs")}>다른 동아리 살펴보기</Button>
           </CardContent>
         </Card>
       </div>
