@@ -2,21 +2,29 @@
 import { toast } from "sonner";
 
 import { Card, CardContent } from "../../ui/card";
-import { mockClubs, mockUserWishlists } from "../../lib/mockData";
+import { Button } from "../../ui/button";
+import { getClubsForCampus, mockUserWishlists } from "../../lib/mockData";
 import { WishlistGrid } from "../../components/wishlist/WishlistGrid";
 import { WishlistEmptyState } from "../../components/wishlist/WishlistEmptyState";
 import { useAuthStore } from "../../stores/authStore";
+import { useActiveCampus } from "../../hooks/useActiveCampus";
+import { useMemo } from "react";
 
 export function WishlistPage() {
   const navigate = useNavigate();
   const user = useAuthStore((state) => state.user);
+  const campus = useActiveCampus();
+  const campusClubs = useMemo(
+    () => getClubsForCampus(campus?.id ?? user?.campusId ?? null),
+    [campus?.id, user?.campusId]
+  );
 
   const wishlistEntry = user
     ? mockUserWishlists.find((entry) => entry.userId === user.id) ??
       mockUserWishlists.find((entry) => entry.userId === "default_user")
     : null;
   const wishlistedClubs = wishlistEntry
-    ? mockClubs.filter((club) => wishlistEntry.clubIds.includes(club.id))
+    ? campusClubs.filter((club) => wishlistEntry.clubIds.includes(club.id))
     : [];
 
   if (!user) {
@@ -25,6 +33,19 @@ export function WishlistPage() {
         <Card>
           <CardContent className="py-12 text-center">
             <p>로그인이 필요합니다.</p>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  if (!campus) {
+    return (
+      <div className="container mx-auto px-4 py-12">
+        <Card>
+          <CardContent className="py-12 text-center">
+            <p className="mb-4">학교 정보가 확인되지 않았어요.</p>
+            <Button onClick={() => navigate("/login")}>다시 로그인</Button>
           </CardContent>
         </Card>
       </div>

@@ -6,6 +6,7 @@ import type { InterviewSlot } from "../types/interview";
 export interface Club {
   activities: string[];
   adminId: string;
+  campusId: string;
   category: string;
   department: string;
   description: string;
@@ -22,12 +23,14 @@ export interface Club {
   type: "major" | "general";
 }
 
+type BaseClub = Omit<Club, "campusId">;
+
 export interface UserWishlist {
   userId: string;
   clubIds: string[];
 }
 
-export const mockClubs: Club[] = [
+const yonamCampusClubs: BaseClub[] = [
   {
     id: "sg01",
     name: "스마트그리드 연구회",
@@ -640,6 +643,123 @@ export const mockClubs: Club[] = [
     ],
   },
 ];
+
+const gnuCampusClubs: BaseClub[] = [
+  {
+    id: "gnu_robotics01",
+    name: "G-Star Robotics Lab",
+    type: "major",
+    category: "로봇/제어",
+    department: "기계공학부",
+    adminId: "gnu_robot_admin",
+    shortDescription:
+      "ROS2와 자율주행 제어를 실습하는 경상국립대 대표 로봇 연구회",
+    description:
+      "G-Star Robotics Lab은 ROS2, PX4, Jetson Orin 등 최신 로봇 기술 스택을 중심으로 이동 로봇을 직접 설계하고 제어 소프트웨어를 구현합니다. 교내 캡스톤 디자인과 국내 로봇 경진대회 준비를 병행하면서 실전 제작 경험을 쌓을 수 있습니다.",
+    imageUrl: "../../public/assets/iotStudy.png",
+    members: 27,
+    tags: ["ROS2", "Jetson", "드론"],
+    isRecruiting: true,
+    recruitDeadline: "2025-12-01",
+    activities: [
+      "ROS2/Python 기반 자율주행 제어 실습",
+      "드론·로봇팔 하드웨어 제작",
+      "국내외 로봇 경진대회 참가",
+    ],
+    direction:
+      "경상국립대 로봇 동아리로서 현장 자동화를 위한 제어 기술을 집중적으로 다룹니다.",
+    notices: [
+      {
+        id: "gnu-robot-notice-1",
+        title: "겨울 학기 신입 부원 모집",
+        content:
+          "12월 1일까지 ROS2 트랙 팀원을 모집합니다. 하드웨어 경험이 없어도 괜찮아요.",
+        date: "2025-11-12",
+        isImportant: true,
+      },
+    ],
+  },
+  {
+    id: "gnu_media01",
+    name: "Media Makers Studio",
+    type: "general",
+    category: "미디어/콘텐츠",
+    department: "인문대학",
+    adminId: "gnu_media_lead",
+    shortDescription:
+      "영상·브랜딩 콘텐츠를 제작하는 경상국립대 미디어 창작 동아리",
+    description:
+      "Media Makers Studio는 다큐멘터리, SNS 브랜딩, 지역 사회공헌 캠페인 등 다양한 포맷의 영상을 직접 기획하고 촬영합니다. 촬영/편집 스터디와 실습을 병행하여 포트폴리오를 채울 수 있도록 운영합니다.",
+    imageUrl: "../../public/assets/digitalPlayground.png",
+    members: 32,
+    tags: ["영상제작", "브랜딩", "SNS"],
+    isRecruiting: true,
+    recruitDeadline: "2025-11-25",
+    activities: [
+      "Adobe Premiere/After Effects 주 1회 스터디",
+      "지역 청년 기업 브랜딩 영상 제작",
+      "경상국립대 정기 영상제 공동 기획",
+    ],
+    direction:
+      "동아리 활동을 통해 실무형 영상 포트폴리오를 완성하고 로컬 브랜딩 프로젝트에 기여합니다.",
+    notices: [
+      {
+        id: "gnu-media-notice-1",
+        title: "11월 콘텐츠 제작 워크숍",
+        content:
+          "브랜딩 디렉터를 초청해 11/16(토) 오후 2시에 워크숍을 진행합니다. 관심있는 학생은 신청해 주세요.",
+        date: "2025-11-08",
+        isImportant: false,
+      },
+    ],
+  },
+  {
+    id: "gnu_ocean01",
+    name: "블루웨이브 해양환경연구회",
+    type: "major",
+    category: "환경/에너지",
+    department: "해양과학대학",
+    adminId: "gnu_ocean_admin",
+    shortDescription:
+      "남해안 해양환경 데이터를 수집·분석하는 환경 연구 프로젝트",
+    description:
+      "블루웨이브는 남해안 조류/미세플라스틱 시료 채집, 센서 데이터 분석, 드론 영상 측량을 활용해 해양 환경 변화를 연구합니다. 지자체와 협력해 정책 제안서를 작성하는 활동도 진행합니다.",
+    imageUrl: "../../public/assets/aiLab.png",
+    members: 21,
+    tags: ["해양데이터", "환경분석", "드론"],
+    isRecruiting: false,
+    recruitDeadline: "2025-10-31",
+    activities: [
+      "남해안 현장 시료 채집 및 데이터 정제",
+      "위성·드론 영상 기반 오염도 시각화",
+      "지자체 환경정책 제안 보고서 작성",
+    ],
+    direction:
+      "정량 데이터 기반의 해양 환경 연구를 통해 남해안 ESG 정책 수립에 기여합니다.",
+    notices: [
+      {
+        id: "gnu-ocean-notice-1",
+        title: "12월 남해안 데이터 캠프",
+        content:
+          "해양과학대 연합 데이터 캠프를 12/5~12/7 진주 캠퍼스에서 진행합니다. 모집은 마감됐지만 견학 신청은 가능합니다.",
+        date: "2025-11-09",
+        isImportant: false,
+      },
+    ],
+  },
+];
+
+export const mockClubs: Club[] = [
+  ...yonamCampusClubs.map((club) => ({ ...club, campusId: "yonam" })),
+  ...gnuCampusClubs.map((club) => ({ ...club, campusId: "gnu" })),
+];
+
+export function getClubsForCampus(campusId?: string | null): Club[] {
+  if (!campusId) {
+    return mockClubs;
+  }
+  return mockClubs.filter((club) => club.campusId === campusId);
+}
 
 export const mockUserWishlists: UserWishlist[] = [
   {

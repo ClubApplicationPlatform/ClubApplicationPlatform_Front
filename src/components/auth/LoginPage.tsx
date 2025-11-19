@@ -1,5 +1,6 @@
 import { useState, type CSSProperties, type FormEvent } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { toast } from "sonner";
 import { Button } from "../../ui/button";
 import { Input } from "../../ui/input";
 import { Label } from "../../ui/label";
@@ -10,8 +11,11 @@ import {
   CardHeader,
   CardTitle,
 } from "../../ui/card";
-import { toast } from "sonner";
 import { useAuthStore } from "../../stores/authStore";
+import {
+  getSupportedEmailSuffixHint,
+  matchCampusByEmail,
+} from "../../lib/campuses";
 
 export function LoginPage() {
   const navigate = useNavigate();
@@ -20,20 +24,31 @@ export function LoginPage() {
     password: "",
   });
   const login = useAuthStore((state) => state.login);
+  const emailHint = getSupportedEmailSuffixHint();
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    const campus = matchCampusByEmail(formData.email);
+    if (!campus) {
+      toast.error(`허용된 학교 이메일(${emailHint})을 입력해 주세요.`);
+      return;
+    }
+
     const userId = formData.email.split("@")[0];
+    const role: "admin" | "user" = userId.startsWith("admin")
+      ? "admin"
+      : "user";
     const user = {
       id: userId,
       email: formData.email,
-      nickname: userId.startsWith("admin") ? `관리자 ${userId}` : "JoinUs 회원",
-      role: userId.startsWith("admin") ? "admin" : "user",
+      nickname: role === "admin" ? `관리자 ${userId}` : "JoinUs 회원",
+      role,
+      campusId: campus.id,
     };
 
     login(user);
-    toast.success("로그인되었습니다.");
+    toast.success(`${campus.name} 계정으로 로그인했어요.`);
     navigate("/clubs");
   };
 
@@ -60,22 +75,25 @@ export function LoginPage() {
             </div>
             <CardTitle className="text-2xl font-semibold">로그인</CardTitle>
             <CardDescription>
-              JoinUs 계정으로 캠퍼스 동아리 정보를 확인해보세요.
+              캠퍼스 이메일로 로그인하고 맞춤 동아리 정보를 확인하세요.
             </CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="email">이메일</Label>
+                <Label htmlFor="email">학교 이메일</Label>
                 <Input
                   id="email"
                   type="email"
-                  placeholder="ex) 22260035@st.yc.ac.kr"
+                  placeholder="ex) user@st.yc.ac.kr 또는 user@gnu.ac.kr"
                   value={formData.email}
                   onChange={(e) =>
                     setFormData({ ...formData, email: e.target.value })
                   }
                 />
+                <p className="text-xs text-gray-500">
+                  사용 가능한 도메인: {emailHint}
+                </p>
               </div>
 
               <div className="space-y-2">

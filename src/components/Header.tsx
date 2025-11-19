@@ -7,6 +7,7 @@ import { Search, UserRound } from "lucide-react";
 import { Input } from "../ui/input";
 import { useClubSearchStore } from "../stores/clubSearchStore";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+import { useActiveCampus } from "../hooks/useActiveCampus";
 
 export function Header() {
   const navigate = useNavigate();
@@ -14,6 +15,7 @@ export function Header() {
     user: state.user,
     logout: state.logout,
   }));
+  const campus = useActiveCampus();
   const isAdmin = user?.role === "admin";
 
   const { query, setQuery } = useClubSearchStore();
@@ -27,7 +29,7 @@ export function Header() {
 
   const handleLogout = () => {
     logout();
-    navigate("/");
+    navigate("/login");
   };
 
   const openMenuLinks = [
@@ -70,7 +72,12 @@ export function Header() {
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
         <Link to="/clubs" className="flex items-center gap-2">
           <img src={Logo} className="h-8 w-8" />
-          <span className="text-xl font-semibold">JoinUs</span>
+          <div className="flex flex-col leading-tight">
+            <span className="text-xl font-semibold">JoinUs</span>
+            {campus && (
+              <span className="text-xs text-gray-500">{campus.shortName}</span>
+            )}
+          </div>
         </Link>
 
         <nav className="flex flex-1 justify-center px-4">

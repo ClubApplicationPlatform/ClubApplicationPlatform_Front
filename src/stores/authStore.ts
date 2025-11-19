@@ -8,6 +8,7 @@ export interface AuthUser {
   email: string;
   nickname: string;
   role: UserRole;
+  campusId: string;
 }
 
 interface AuthState {

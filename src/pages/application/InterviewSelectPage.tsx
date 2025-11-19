@@ -8,6 +8,7 @@ import { InterviewSlotForm } from "../../components/interview/InterviewSlotForm"
 import { InterviewSlotList } from "../../components/interview/InterviewSlotList";
 import { mockClubs, mockInterviewSlots } from "../../lib/mockData";
 import { useAuthStore } from "../../stores/authStore";
+import { useActiveCampus } from "../../hooks/useActiveCampus";
 import { Button } from "../../ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "../../ui/card";
 
@@ -15,6 +16,7 @@ export function InterviewSelectPage() {
   const { clubId } = useParams();
   const navigate = useNavigate();
   const user = useAuthStore((state) => state.user);
+  const campus = useActiveCampus();
 
   const club = mockClubs.find((item) => item.id === clubId);
   const interviewSlots = mockInterviewSlots.filter((slot) => slot.clubId === clubId);
@@ -35,6 +37,19 @@ export function InterviewSelectPage() {
         <Card>
           <CardContent className="py-12 text-center">
             <p>동아리를 찾을 수 없습니다.</p>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  if (campus && club.campusId !== campus.id) {
+    return (
+      <div className="container mx-auto px-4 py-12">
+        <Card>
+          <CardContent className="py-12 text-center">
+            <p className="mb-4">해당 학교 동아리 면접만 예약할 수 있어요.</p>
+            <Button onClick={() => navigate("/clubs")}>동아리 목록으로 이동</Button>
           </CardContent>
         </Card>
       </div>

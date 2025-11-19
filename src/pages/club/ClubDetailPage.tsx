@@ -10,11 +10,13 @@ import { toast } from "sonner";
 import ClubDetailPageSideBar from "../../components/club/ClubDetailPageSideBar";
 import ClubDetailPageHero from "../../components/club/ClubDetailPageHero";
 import { useAuthStore } from "../../stores/authStore";
+import { useActiveCampus } from "../../hooks/useActiveCampus";
 
 export function ClubDetailPage() {
   const { clubId } = useParams();
   const navigate = useNavigate();
   const user = useAuthStore((state) => state.user);
+  const campus = useActiveCampus();
   const [isWishlisted, setIsWishlisted] = useState(false);
 
   const club = mockClubs.find((c) => c.id === clubId);
@@ -25,6 +27,21 @@ export function ClubDetailPage() {
         <Card>
           <CardContent className="py-12 text-center">
             <p>동아리를 찾을 수 없습니다.</p>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  if (campus && club.campusId !== campus.id) {
+    return (
+      <div className="container mx-auto px-4 py-12">
+        <Card>
+          <CardContent className="py-12 text-center">
+            <p className="mb-4">
+              {campus.name} 학생은 다른 학교 동아리 정보를 열람할 수 없어요.
+            </p>
+            <Button onClick={() => navigate("/clubs")}>동아리 목록으로 이동</Button>
           </CardContent>
         </Card>
       </div>
