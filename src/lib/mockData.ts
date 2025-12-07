@@ -650,7 +650,8 @@ const yonamCampusClubs: BaseClub[] = [
     department: "학생자치",
     adminId: "yonam_band01_admin",
     shortDescription: "록·어쿠스틱 합주로 캠퍼스 공연을 준비하는 밴드",
-    description: "연암 밴드연합은 장르를 가리지 않고 곡을 커버하며 자작곡을 만들어 축제와 버스킹 무대를 준비합니다.",
+    description:
+      "연암 밴드연합은 장르를 가리지 않고 곡을 커버하며 자작곡을 만들어 축제와 버스킹 무대를 준비합니다.",
     imageUrl: "../../public/assets/JoinUs_Logo.png",
     members: 28,
     tags: ["밴드", "공연", "합주"],
@@ -681,7 +682,8 @@ const yonamCampusClubs: BaseClub[] = [
     department: "학생자치",
     adminId: "yonam_mz01_admin",
     shortDescription: "숏폼 영상과 카드뉴스를 제작하는 트렌드 콘텐츠팀",
-    description: "SNS 숏폼, 카드뉴스, 캠퍼스 밈 콘텐츠를 기획·촬영·편집하며 최신 트렌드를 기록합니다.",
+    description:
+      "SNS 숏폼, 카드뉴스, 캠퍼스 밈 콘텐츠를 기획·촬영·편집하며 최신 트렌드를 기록합니다.",
     imageUrl: "../../public/assets/JoinUs_Logo.png",
     members: 24,
     tags: ["숏폼", "SNS", "기획"],
@@ -712,7 +714,8 @@ const yonamCampusClubs: BaseClub[] = [
     department: "학생자치",
     adminId: "yonam_plant01_admin",
     shortDescription: "캠퍼스 플랜테리어와 가드닝을 즐기는 힐링 모임",
-    description: "다육이, 허브, 수경식물을 직접 키우며 관리 노하우를 공유하고 공용 화단을 함께 가꿉니다.",
+    description:
+      "다육이, 허브, 수경식물을 직접 키우며 관리 노하우를 공유하고 공용 화단을 함께 가꿉니다.",
     imageUrl: "../../public/assets/JoinUs_Logo.png",
     members: 19,
     tags: ["가드닝", "힐링", "플랜테리어"],
@@ -743,17 +746,14 @@ const yonamCampusClubs: BaseClub[] = [
     department: "학생자치",
     adminId: "yonam_run01_admin",
     shortDescription: "주 2회 학교 안팎을 달리는 러닝 & 마라톤 모임",
-    description: "아침·야간 러닝 세션과 기록 공유, 지역 러닝 대회 참가 준비를 함께 진행합니다.",
+    description:
+      "아침·야간 러닝 세션과 기록 공유, 지역 러닝 대회 참가 준비를 함께 진행합니다.",
     imageUrl: "../../public/assets/JoinUs_Logo.png",
     members: 35,
     tags: ["러닝", "건강", "마라톤"],
     isRecruiting: true,
     recruitDeadline: "2025-11-20",
-    activities: [
-      "주 2회 5km 러닝",
-      "체형 케어 스트레칭",
-      "지역 대회 참가",
-    ],
+    activities: ["주 2회 5km 러닝", "체형 케어 스트레칭", "지역 대회 참가"],
     direction:
       "캠퍼스 생활을 더욱 풍성하게 만들고 싶은 학생이라면 언제든 환영해요.",
     notices: [
@@ -774,17 +774,14 @@ const yonamCampusClubs: BaseClub[] = [
     department: "학생자치",
     adminId: "yonam_badminton01_admin",
     shortDescription: "레벨별로 즐기는 생활체육 배드민턴 리그",
-    description: "기초 자세 교정부터 복식 전략까지 배우며 자체 친선 리그와 교류전을 운영합니다.",
+    description:
+      "기초 자세 교정부터 복식 전략까지 배우며 자체 친선 리그와 교류전을 운영합니다.",
     imageUrl: "../../public/assets/JoinUs_Logo.png",
     members: 42,
     tags: ["배드민턴", "생활체육", "리그"],
     isRecruiting: true,
     recruitDeadline: "2025-12-05",
-    activities: [
-      "주중 저녁 실내 훈련",
-      "월간 랭킹전",
-      "교류전 개최",
-    ],
+    activities: ["주중 저녁 실내 훈련", "월간 랭킹전", "교류전 개최"],
     direction:
       "캠퍼스 생활을 더욱 풍성하게 만들고 싶은 학생이라면 언제든 환영해요.",
     notices: [
@@ -805,17 +802,14 @@ const yonamCampusClubs: BaseClub[] = [
     department: "학생자치",
     adminId: "yonam_movie01_admin",
     shortDescription: "월 2회 상영·토론을 진행하는 영화 동아리",
-    description: "OTT 신작부터 고전 명작까지 함께 보고 리뷰 노트를 작성하며 팟캐스트를 제작합니다.",
+    description:
+      "OTT 신작부터 고전 명작까지 함께 보고 리뷰 노트를 작성하며 팟캐스트를 제작합니다.",
     imageUrl: "../../public/assets/JoinUs_Logo.png",
     members: 30,
     tags: ["영화", "토론", "OTT"],
     isRecruiting: true,
     recruitDeadline: "2025-11-22",
-    activities: [
-      "정기 상영회",
-      "라운드 테이블 토론",
-      "리뷰 콘텐츠 제작",
-    ],
+    activities: ["정기 상영회", "라운드 테이블 토론", "리뷰 콘텐츠 제작"],
     direction:
       "캠퍼스 생활을 더욱 풍성하게 만들고 싶은 학생이라면 언제든 환영해요.",
     notices: [
@@ -836,7 +830,8 @@ const yonamCampusClubs: BaseClub[] = [
     department: "학생자치",
     adminId: "yonam_ott01_admin",
     shortDescription: "OTT 신작을 분석하고 추천 큐레이션을 만드는 스터디",
-    description: "플랫폼별 신작을 분석해 큐레이션 레터를 발행하고 데이터 기반 추천 실험을 진행합니다.",
+    description:
+      "플랫폼별 신작을 분석해 큐레이션 레터를 발행하고 데이터 기반 추천 실험을 진행합니다.",
     imageUrl: "../../public/assets/JoinUs_Logo.png",
     members: 18,
     tags: ["OTT", "큐레이션", "리포트"],
@@ -867,7 +862,8 @@ const yonamCampusClubs: BaseClub[] = [
     department: "학생자치",
     adminId: "yonam_health01_admin",
     shortDescription: "웨이트 트레이닝과 식단 관리를 함께 챙기는 커뮤니티",
-    description: "레벨별 프로그램과 식단 공유, PT 강사 초청 세션으로 건강 습관을 만들어 갑니다.",
+    description:
+      "레벨별 프로그램과 식단 공유, PT 강사 초청 세션으로 건강 습관을 만들어 갑니다.",
     imageUrl: "../../public/assets/JoinUs_Logo.png",
     members: 38,
     tags: ["헬스", "식단", "PT"],
@@ -898,17 +894,14 @@ const yonamCampusClubs: BaseClub[] = [
     department: "학생자치",
     adminId: "yonam_basket01_admin",
     shortDescription: "주 2회 체육관에서 즐기는 농구 친선 리그",
-    description: "포지션별 훈련과 3x3 토너먼트, 교류전을 통해 실력 향상과 친목을 동시에 추구합니다.",
+    description:
+      "포지션별 훈련과 3x3 토너먼트, 교류전을 통해 실력 향상과 친목을 동시에 추구합니다.",
     imageUrl: "../../public/assets/JoinUs_Logo.png",
     members: 33,
     tags: ["농구", "3x3", "리그"],
     isRecruiting: true,
     recruitDeadline: "2025-11-30",
-    activities: [
-      "주 2회 팀 훈련",
-      "월간 토너먼트",
-      "타 대학 친선 경기",
-    ],
+    activities: ["주 2회 팀 훈련", "월간 토너먼트", "타 대학 친선 경기"],
     direction:
       "캠퍼스 생활을 더욱 풍성하게 만들고 싶은 학생이라면 언제든 환영해요.",
     notices: [
@@ -929,17 +922,14 @@ const yonamCampusClubs: BaseClub[] = [
     department: "학생자치",
     adminId: "yonam_siloam01_admin",
     shortDescription: "지역 어르신과 아이들을 돕는 연암 대표 봉사단",
-    description: "급식 봉사, 학습 멘토링, 주거 환경 개선 프로젝트를 진행하며 기부 바자회를 엽니다.",
+    description:
+      "급식 봉사, 학습 멘토링, 주거 환경 개선 프로젝트를 진행하며 기부 바자회를 엽니다.",
     imageUrl: "../../public/assets/JoinUs_Logo.png",
     members: 26,
     tags: ["봉사", "멘토링", "바자회"],
     isRecruiting: true,
     recruitDeadline: "2025-11-28",
-    activities: [
-      "주말 급식·학습 봉사",
-      "주거 환경 개선",
-      "기부 바자회 기획",
-    ],
+    activities: ["주말 급식·학습 봉사", "주거 환경 개선", "기부 바자회 기획"],
     direction:
       "캠퍼스 생활을 더욱 풍성하게 만들고 싶은 학생이라면 언제든 환영해요.",
     notices: [
@@ -960,17 +950,14 @@ const yonamCampusClubs: BaseClub[] = [
     department: "학생자치",
     adminId: "yonam_futsal01_admin",
     shortDescription: "야간 풋살 정기전과 자체 리그를 운영하는 팀",
-    description: "학교 풋살장을 대관해 야간 경기를 즐기고 자체 랭킹전과 지역 대회 참가를 준비합니다.",
+    description:
+      "학교 풋살장을 대관해 야간 경기를 즐기고 자체 랭킹전과 지역 대회 참가를 준비합니다.",
     imageUrl: "../../public/assets/JoinUs_Logo.png",
     members: 29,
     tags: ["풋살", "야간경기", "리그"],
     isRecruiting: true,
     recruitDeadline: "2025-11-24",
-    activities: [
-      "주 2회 야간 풋살",
-      "월간 랭킹전",
-      "지역 대회 참가",
-    ],
+    activities: ["주 2회 야간 풋살", "월간 랭킹전", "지역 대회 참가"],
     direction:
       "캠퍼스 생활을 더욱 풍성하게 만들고 싶은 학생이라면 언제든 환영해요.",
     notices: [
@@ -991,17 +978,14 @@ const yonamCampusClubs: BaseClub[] = [
     department: "학생자치",
     adminId: "yonam_trip01_admin",
     shortDescription: "국내 소도시 탐방과 계절 캠핑을 즐기는 여행 동아리",
-    description: "월 1회 탐방, 계절 캠핑, 사진 기록 프로젝트를 진행하며 여행 전 과정을 함께 기획합니다.",
+    description:
+      "월 1회 탐방, 계절 캠핑, 사진 기록 프로젝트를 진행하며 여행 전 과정을 함께 기획합니다.",
     imageUrl: "../../public/assets/JoinUs_Logo.png",
     members: 22,
     tags: ["여행", "캠핑", "기록"],
     isRecruiting: true,
     recruitDeadline: "2025-11-29",
-    activities: [
-      "분기별 캠핑",
-      "여행 예산·루트 기획",
-      "여행 아카이브 제작",
-    ],
+    activities: ["분기별 캠핑", "여행 예산·루트 기획", "여행 아카이브 제작"],
     direction:
       "캠퍼스 생활을 더욱 풍성하게 만들고 싶은 학생이라면 언제든 환영해요.",
     notices: [
@@ -1022,17 +1006,14 @@ const yonamCampusClubs: BaseClub[] = [
     department: "학생자치",
     adminId: "yonam_board01_admin",
     shortDescription: "전략·파티 게임을 모두 즐기는 보드게임 커뮤니티",
-    description: "다양한 장르의 보드게임을 수집해 주 2회 라운지를 운영하고 토너먼트를 개최합니다.",
+    description:
+      "다양한 장르의 보드게임을 수집해 주 2회 라운지를 운영하고 토너먼트를 개최합니다.",
     imageUrl: "../../public/assets/JoinUs_Logo.png",
     members: 31,
     tags: ["보드게임", "전략", "파티"],
     isRecruiting: true,
     recruitDeadline: "2025-11-26",
-    activities: [
-      "주 2회 라운지 운영",
-      "신작 체험 세션",
-      "협력전·토너먼트",
-    ],
+    activities: ["주 2회 라운지 운영", "신작 체험 세션", "협력전·토너먼트"],
     direction:
       "캠퍼스 생활을 더욱 풍성하게 만들고 싶은 학생이라면 언제든 환영해요.",
     notices: [
@@ -1053,17 +1034,14 @@ const yonamCampusClubs: BaseClub[] = [
     department: "학생자치",
     adminId: "yonam_biz01_admin",
     shortDescription: "산업·기업 리포트를 작성하는 케이스 스터디 그룹",
-    description: "산업 동향과 재무 지표를 분석해 월간 리포트를 발행하고 모의 컨설팅 프로젝트를 수행합니다.",
+    description:
+      "산업 동향과 재무 지표를 분석해 월간 리포트를 발행하고 모의 컨설팅 프로젝트를 수행합니다.",
     imageUrl: "../../public/assets/JoinUs_Logo.png",
     members: 25,
     tags: ["기업분석", "케이스스터디", "리포트"],
     isRecruiting: true,
     recruitDeadline: "2025-12-03",
-    activities: [
-      "주간 산업 리서치",
-      "기업 사례 발표",
-      "모의 컨설팅",
-    ],
+    activities: ["주간 산업 리서치", "기업 사례 발표", "모의 컨설팅"],
     direction:
       "캠퍼스 생활을 더욱 풍성하게 만들고 싶은 학생이라면 언제든 환영해요.",
     notices: [
@@ -1076,7 +1054,6 @@ const yonamCampusClubs: BaseClub[] = [
       },
     ],
   },
-
 ];
 
 const gnuCampusClubs: BaseClub[] = [
@@ -1412,4 +1389,3 @@ export const mockQuestions = [
     maxLength: 600,
   },
 ];
-

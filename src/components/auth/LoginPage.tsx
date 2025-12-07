@@ -12,10 +12,16 @@ import {
   CardTitle,
 } from "../../ui/card";
 import { useAuthStore } from "../../stores/authStore";
-import {
-  getSupportedEmailSuffixHint,
-  matchCampusByEmail,
-} from "../../lib/campuses";
+import { matchCampusByEmail } from "../../lib/campuses";
+
+const LOGIN_ENDPOINT =
+  "https://clubapplicationplatform-server.onrender.com/api/v1/auth/login";
+
+const heroStyles: CSSProperties = {
+  backgroundImage: "url('/assets/JoinUs_Background.png')",
+  backgroundSize: "cover",
+  backgroundPosition: "center",
+};
 
 export function LoginPage() {
   const navigate = useNavigate();
@@ -24,38 +30,86 @@ export function LoginPage() {
     password: "",
   });
   const login = useAuthStore((state) => state.login);
-  const emailHint = getSupportedEmailSuffixHint();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     const campus = matchCampusByEmail(formData.email);
-    if (!campus) {
-      toast.error(`허용된 학교 이메일(${emailHint})을 입력해 주세요.`);
-      return;
+
+    setIsSubmitting(true);
+    try {
+      const response = await fetch(LOGIN_ENDPOINT, {
+        method: "POST",
+        headers: {
+          accept: "*/*",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: formData.email,
+          password: formData.password,
+        }),
+      });
+
+      const body = (await response.json().catch(() => null)) as {
+        status?: number;
+        data?: {
+          access_token?: string;
+          refresh_token?: string;
+        } | null;
+        message?: string;
+      } | null;
+
+      const status = body?.status ?? response.status;
+      const isOk = response.ok && status < 400;
+
+      if (!isOk) {
+        let message = body?.message;
+        if (!message) {
+          if (status === 400 || status === 401) {
+            message = "이메일 또는 비밀번호를 확인해주세요.";
+          } else if (status === 404) {
+            message = "회원가입이 되어 있지 않거나 잘못된 정보입니다.";
+          } else {
+            message = "로그인에 실패했습니다. 다시 시도해주세요.";
+          }
+        }
+        toast.error(message);
+        return;
+      }
+
+      const accessToken = body?.data?.access_token;
+      const refreshToken = body?.data?.refresh_token;
+      if (!accessToken || !refreshToken) {
+        toast.error("로그인에 필요한 토큰을 받지 못했습니다.");
+        return;
+      }
+
+      const userId = formData.email.split("@")[0] || formData.email;
+      const role: "admin" | "user" = userId.startsWith("admin")
+        ? "admin"
+        : "user";
+      const user = {
+        id: userId,
+        email: formData.email,
+        nickname: role === "admin" ? `관리자 ${userId}` : "JoinUs 회원",
+        role,
+        campusId: campus?.id ?? "",
+      };
+
+      login(user, { accessToken, refreshToken });
+      const successMsg = body?.message
+        ? body.message
+        : campus?.name
+          ? `${campus.name} 계정으로 로그인했어요.`
+          : "로그인했어요.";
+      toast.success(successMsg);
+      navigate("/clubs");
+    } catch (error) {
+      console.error(error);
+      toast.error("로그인 중 문제가 발생했습니다. 다시 시도해주세요.");
+    } finally {
+      setIsSubmitting(false);
     }
-
-    const userId = formData.email.split("@")[0];
-    const role: "admin" | "user" = userId.startsWith("admin")
-      ? "admin"
-      : "user";
-    const user = {
-      id: userId,
-      email: formData.email,
-      nickname: role === "admin" ? `관리자 ${userId}` : "JoinUs 회원",
-      role,
-      campusId: campus.id,
-    };
-
-    login(user);
-    toast.success(`${campus.name} 계정으로 로그인했어요.`);
-    navigate("/clubs");
-  };
-
-  const heroStyles: CSSProperties = {
-    backgroundImage: "url('/assets/JoinUs_Background.png')",
-    backgroundSize: "cover",
-    backgroundPosition: "center",
   };
 
   return (
@@ -84,15 +138,16 @@ export function LoginPage() {
                 <Label htmlFor="email">학교 이메일</Label>
                 <Input
                   id="email"
-                  type="email"
-                  placeholder="ex) user@st.yc.ac.kr 또는 user@gnu.ac.kr"
+                  type="text"
+                  placeholder="이메일을 입력하세요 (@ 없이도 임시 허용)"
                   value={formData.email}
                   onChange={(e) =>
                     setFormData({ ...formData, email: e.target.value })
                   }
+                  required
                 />
                 <p className="text-xs text-gray-500">
-                  사용 가능한 도메인: {emailHint}
+                  임시로 @ 없이도 로그인 가능합니다.
                 </p>
               </div>
 
@@ -106,6 +161,7 @@ export function LoginPage() {
                   onChange={(e) =>
                     setFormData({ ...formData, password: e.target.value })
                   }
+                  required
                 />
               </div>
 
@@ -118,8 +174,8 @@ export function LoginPage() {
                 </Link>
               </div>
 
-              <Button type="submit" className="w-full">
-                로그인
+              <Button type="submit" className="w-full" disabled={isSubmitting}>
+                {isSubmitting ? "로그인 중..." : "로그인"}
               </Button>
 
               <div className="text-center text-sm">

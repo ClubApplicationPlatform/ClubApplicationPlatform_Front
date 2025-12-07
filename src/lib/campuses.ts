@@ -28,6 +28,7 @@ export const campuses: Campus[] = [
   },
 ];
 
+const DEFAULT_CAMPUS_ID = "yonam";
 const campusById = new Map<string, Campus>();
 const campusByDomain = new Map<string, Campus>();
 
@@ -53,11 +54,8 @@ export function getCampusByDomain(domain: string): Campus | null {
 }
 
 export function matchCampusByEmail(email: string): Campus | null {
-  if (!email.includes("@")) {
-    return null;
-  }
-  const [, domain = ""] = email.toLowerCase().split("@");
-  return getCampusByDomain(domain);
+  // 임시 조치: 이메일 도메인 구분 없이 연암공대로 고정
+  return getCampusById(DEFAULT_CAMPUS_ID);
 }
 
 export function getSupportedEmailDomains(): string[] {

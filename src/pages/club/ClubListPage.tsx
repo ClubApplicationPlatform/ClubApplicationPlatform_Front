@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Users, GraduationCap, Globe } from "lucide-react";
 
@@ -6,9 +6,16 @@ import { Button } from "../../ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../ui/tabs";
 import ClubGrid from "../../components/club/ClubGrid";
 import { useClubSearchStore } from "../../stores/clubSearchStore";
-import { getClubsForCampus } from "../../lib/mockData";
+import { getClubsForCampus, type Club } from "../../lib/mockData";
 import { useActiveCampus } from "../../hooks/useActiveCampus";
 import { useAuthStore } from "../../stores/authStore";
+
+const LoadingState = () => (
+  <div className="flex flex-col items-center justify-center rounded-lg border bg-white p-8 text-gray-600 shadow-sm">
+    <div className="mb-3 h-10 w-10 animate-spin rounded-full border-4 border-blue-500 border-t-transparent" />
+    <p className="text-base">동아리 정보를 불러오는 중입니다...</p>
+  </div>
+);
 
 export function ClubListPage() {
   const navigate = useNavigate();
@@ -20,28 +27,99 @@ export function ClubListPage() {
   const trimmedQuery = searchQuery.trim();
   const normalizedQuery = trimmedQuery.toLowerCase();
 
-  const [selectedDepartment, setSelectedDepartment] =
-    useState<string>("전체");
+  const [selectedDepartment, setSelectedDepartment] = useState<string>("전체");
   const [selectedType, setSelectedType] = useState<"all" | "major" | "general">(
     "all"
   );
   const [recruitStatus, setRecruitStatus] = useState<
     "all" | "recruiting" | "closed"
   >("all");
+  const [clubs, setClubs] = useState<Club[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const departments = [
     "전체",
-    "전기전자공학부",
     "스마트전기전자공학과",
-    "기계공학부",
+    "스마트전기전자공학과",
+    "기계공학과",
     "스마트기계공학과",
     "스마트소프트웨어과",
   ];
 
-  const campusClubs = useMemo(
-    () => getClubsForCampus(campusId),
-    [campusId]
-  );
+  useEffect(() => {
+    let cancelled = false;
+    const fetchClubs = async () => {
+      setIsLoading(true);
+      try {
+        const response = await fetch(
+          "https://clubapplicationplatform-server.onrender.com/api/clubs",
+          {
+            headers: { accept: "*/*" },
+          }
+        );
+        const body = (await response.json().catch(() => null)) as
+          | {
+              clubId?: number | string;
+              name?: string;
+              shortDesc?: string;
+              type?: string;
+              category?: string;
+              department?: string;
+              recruitStatus?: string;
+            }[]
+          | null;
+
+        const ok = response.ok && Array.isArray(body);
+        if (!ok || !body) {
+          throw new Error("Failed to load clubs");
+        }
+
+        const mapped: Club[] = body.map((item, index) => {
+          const isRecruiting =
+            (item?.recruitStatus ?? "").toString().toLowerCase() === "open";
+          return {
+            id: String(item?.clubId ?? index),
+            name: item?.name ?? "이름 미정",
+            type: (item?.type as Club["type"]) ?? "general",
+            category: item?.category ?? "기타",
+            department: item?.department ?? "미정",
+            adminId: "",
+            campusId: campusId ?? "yonam",
+            shortDescription: item?.shortDesc ?? "소개가 준비 중입니다.",
+            description: "",
+            direction: "",
+            imageUrl: "/fallback.png",
+            members: 0,
+            tags: [],
+            isRecruiting,
+            recruitDeadline: "",
+            notices: [],
+            activities: [],
+          };
+        });
+
+        if (!cancelled) {
+          setClubs(mapped);
+        }
+      } catch (error) {
+        console.error("클럽 목록 불러오기 실패, mock 데이터 사용", error);
+        if (!cancelled) {
+          setClubs(getClubsForCampus(campusId));
+        }
+      } finally {
+        if (!cancelled) {
+          setIsLoading(false);
+        }
+      }
+    };
+
+    fetchClubs();
+    return () => {
+      cancelled = true;
+    };
+  }, [campusId]);
+
+  const campusClubs = useMemo(() => clubs, [clubs]);
 
   const filteredClubs = useMemo(() => {
     return campusClubs.filter((club) => {
@@ -60,7 +138,9 @@ export function ClubListPage() {
         (recruitStatus === "recruiting" && club.isRecruiting) ||
         (recruitStatus === "closed" && !club.isRecruiting);
 
-      return matchesSearch && matchesType && matchesDepartment && matchesRecruit;
+      return (
+        matchesSearch && matchesType && matchesDepartment && matchesRecruit
+      );
     });
   }, [
     campusClubs,
@@ -82,9 +162,9 @@ export function ClubListPage() {
             캠퍼스 정보를 불러올 수 없어요
           </h1>
           <p className="mb-6 text-gray-600">
-            다시 로그인하면 학교별 동아리 정보를 정상적으로 확인할 수 있어요.
+            다시 로그인하면 학교별 동아리 정보를 확인할 수 있어요.
           </p>
-          <Button onClick={() => navigate("/login")}>로그인 페이지로 이동</Button>
+          <Button onClick={() => navigate("/login")}>로그인 페이지 이동</Button>
         </div>
       </div>
     );
@@ -161,7 +241,9 @@ export function ClubListPage() {
                   전체
                 </Button>
                 <Button
-                  variant={recruitStatus === "recruiting" ? "default" : "outline"}
+                  variant={
+                    recruitStatus === "recruiting" ? "default" : "outline"
+                  }
                   onClick={() => setRecruitStatus("recruiting")}
                   className="whitespace-nowrap hover:cursor-pointer"
                   size="sm"
@@ -208,52 +290,73 @@ export function ClubListPage() {
           )}
 
           <TabsContent value="all">
-            <div className="mb-6">
-              <p className="text-gray-600">
-                총{" "}
-                <span className="text-blue-600">{filteredClubs.length}</span>
-                개의 동아리가 검색되었습니다.
-              </p>
-            </div>
-            <ClubGrid
-              searchQuery={searchQuery}
-              selectedType={selectedType}
-              selectedDepartment={selectedDepartment}
-              recruitStatus={recruitStatus}
-              clubs={filteredClubs}
-            />
+            {isLoading ? (
+              <LoadingState />
+            ) : (
+              <>
+                <div className="mb-6">
+                  <p className="text-gray-600">
+                    총{" "}
+                    <span className="text-blue-600">
+                      {filteredClubs.length}
+                    </span>
+                    개의 동아리가 검색되었습니다.
+                  </p>
+                </div>
+                <ClubGrid
+                  searchQuery={searchQuery}
+                  selectedType={selectedType}
+                  selectedDepartment={selectedDepartment}
+                  recruitStatus={recruitStatus}
+                  clubs={filteredClubs}
+                />
+              </>
+            )}
           </TabsContent>
 
           <TabsContent value="major">
-            <div className="mb-6">
-              <p className="text-gray-600">
-                전공 동아리{" "}
-                <span className="text-blue-600">{majorClubs.length}</span>개
-              </p>
-            </div>
-            <ClubGrid
-              searchQuery={searchQuery}
-              selectedType={selectedType}
-              selectedDepartment={selectedDepartment}
-              recruitStatus={recruitStatus}
-              clubs={majorClubs}
-            />
+            {isLoading ? (
+              <LoadingState />
+            ) : (
+              <>
+                <div className="mb-6">
+                  <p className="text-gray-600">
+                    전공 동아리{" "}
+                    <span className="text-blue-600">{majorClubs.length}</span>개
+                  </p>
+                </div>
+                <ClubGrid
+                  searchQuery={searchQuery}
+                  selectedType={selectedType}
+                  selectedDepartment={selectedDepartment}
+                  recruitStatus={recruitStatus}
+                  clubs={majorClubs}
+                />
+              </>
+            )}
           </TabsContent>
 
           <TabsContent value="general">
-            <div className="mb-6">
-              <p className="text-gray-600">
-                일반 동아리{" "}
-                <span className="text-blue-600">{generalClubs.length}</span>개
-              </p>
-            </div>
-            <ClubGrid
-              searchQuery={searchQuery}
-              selectedType={selectedType}
-              selectedDepartment={selectedDepartment}
-              recruitStatus={recruitStatus}
-              clubs={generalClubs}
-            />
+            {isLoading ? (
+              <LoadingState />
+            ) : (
+              <>
+                <div className="mb-6">
+                  <p className="text-gray-600">
+                    일반 동아리{" "}
+                    <span className="text-blue-600">{generalClubs.length}</span>
+                    개
+                  </p>
+                </div>
+                <ClubGrid
+                  searchQuery={searchQuery}
+                  selectedType={selectedType}
+                  selectedDepartment={selectedDepartment}
+                  recruitStatus={recruitStatus}
+                  clubs={generalClubs}
+                />
+              </>
+            )}
           </TabsContent>
         </Tabs>
       </div>

@@ -1,8 +1,5 @@
-import { useEffect, useMemo, useState, type CSSProperties } from "react";
+﻿import { useMemo, useState, type CSSProperties } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
-import { Mail, CheckCircle, Clock } from "lucide-react";
-import emailjs from "@emailjs/browser";
 import { toast } from "sonner";
 
 import { Button } from "../../ui/button";
@@ -21,38 +18,8 @@ import {
   matchCampusByEmail,
 } from "../../lib/campuses";
 
-const EMAILJS_SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID as string;
-const EMAILJS_TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID as string;
-const EMAILJS_PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY as string;
-
-const EXPIRE_SECONDS = 180;
-const RESEND_COOLDOWN = 60;
-const STORAGE_KEY = "signup-email-code";
-
-type StoredCode = {
-  email: string;
-  code: string;
-  expiresAt: number;
-  lastSentAt: number;
-};
-
-const loadStoredCode = (): StoredCode | null => {
-  try {
-    const raw = sessionStorage.getItem(STORAGE_KEY);
-    return raw ? (JSON.parse(raw) as StoredCode) : null;
-  } catch {
-    return null;
-  }
-};
-
-const saveStoredCode = (payload: StoredCode) => {
-  sessionStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
-};
-
-const clearStoredCode = () => sessionStorage.removeItem(STORAGE_KEY);
-
-const generateCode = (len = 6) =>
-  Math.floor(10 ** (len - 1) + Math.random() * 9 * 10 ** (len - 1)).toString();
+const REGISTER_ENDPOINT =
+  "https://clubapplicationplatform-server.onrender.com/api/v1/auth/register";
 
 const heroStyles: CSSProperties = {
   backgroundImage: "url('/assets/JoinUs_Background.png')",
@@ -67,158 +34,38 @@ export function SignupPage() {
 
   const [form, setForm] = useState({
     email: "",
-    verificationCode: "",
     nickname: "",
     password: "",
     confirmPassword: "",
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const [isCodeSent, setIsCodeSent] = useState(false);
-  const [isVerified, setIsVerified] = useState(false);
-  const [timeLeft, setTimeLeft] = useState(0);
-  const [isSendingCode, setIsSendingCode] = useState(false);
-
-  useEffect(() => {
-    if (timeLeft <= 0) {
-      return;
-    }
-    const timer = setTimeout(() => setTimeLeft((prev) => prev - 1), 1000);
-    return () => clearTimeout(timer);
-  }, [timeLeft]);
-
-  useEffect(() => {
-    const stored = loadStoredCode();
-    if (!stored) {
-      return;
-    }
-    const remain = Math.max(0, Math.floor((stored.expiresAt - Date.now()) / 1000));
-    if (remain > 0) {
-      setForm((prev) => ({ ...prev, email: stored.email }));
-      setIsCodeSent(true);
-      setTimeLeft(remain);
-    } else {
-      clearStoredCode();
-    }
-  }, []);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const validateEmail = (email: string) =>
     /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
   const validatePassword = (password: string) => password.length >= 8;
 
-  const handleSendVerificationCode = async () => {
-    if (!form.email) {
-      setErrors((prev) => ({ ...prev, email: "학교 이메일을 입력해 주세요." }));
-      return;
-    }
-    if (!validateEmail(form.email)) {
-      setErrors((prev) => ({
-        ...prev,
-        email: "올바른 이메일 형식이 아니에요.",
-      }));
-      return;
-    }
-    const campus = matchCampusByEmail(form.email);
-    if (!campus) {
-      setErrors((prev) => ({
-        ...prev,
-        email: `${emailHint} 도메인만 사용할 수 있어요.`,
-      }));
-      return;
-    }
-
-    const stored = loadStoredCode();
-    if (stored && stored.email === form.email) {
-      const since = Math.floor((Date.now() - stored.lastSentAt) / 1000);
-      if (since < RESEND_COOLDOWN) {
-        toast.error(`${RESEND_COOLDOWN - since}초 뒤에 다시 시도해 주세요.`);
-        return;
-      }
-    }
-
-    setIsSendingCode(true);
-    try {
-      const code = generateCode();
-      await emailjs.send(
-        EMAILJS_SERVICE_ID,
-        EMAILJS_TEMPLATE_ID,
-        { to_email: form.email, verification_code: code },
-        EMAILJS_PUBLIC_KEY
-      );
-      saveStoredCode({
-        email: form.email,
-        code,
-        expiresAt: Date.now() + EXPIRE_SECONDS * 1000,
-        lastSentAt: Date.now(),
-      });
-      setIsCodeSent(true);
-      setTimeLeft(EXPIRE_SECONDS);
-      toast.success("인증번호를 전송했어요. 학교 메일함을 확인해 주세요.");
-    } catch (error) {
-      console.error(error);
-      toast.error("인증번호 전송에 실패했어요. 다시 시도해 주세요.");
-    } finally {
-      setIsSendingCode(false);
-    }
-  };
-
-  const handleVerifyCode = () => {
-    if (!form.verificationCode.trim()) {
-      setErrors((prev) => ({
-        ...prev,
-        verificationCode: "인증번호를 입력해 주세요.",
-      }));
-      return;
-    }
-    const stored = loadStoredCode();
-    if (!stored || stored.email !== form.email) {
-      toast.error("인증번호를 다시 요청해 주세요.");
-      return;
-    }
-    if (Date.now() > stored.expiresAt) {
-      toast.error("인증 시간이 만료됐어요. 다시 요청해 주세요.");
-      setTimeLeft(0);
-      clearStoredCode();
-      return;
-    }
-    if (stored.code === form.verificationCode.trim()) {
-      setIsVerified(true);
-      setTimeLeft(0);
-      clearStoredCode();
-      toast.success("학교 이메일 인증이 완료됐어요.");
-    } else {
-      setErrors((prev) => ({
-        ...prev,
-        verificationCode: "인증번호가 일치하지 않아요.",
-      }));
-      toast.error("인증번호가 일치하지 않아요.");
-    }
-  };
-
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const nextErrors: Record<string, string> = {};
 
-    if (!isVerified) {
-      toast.error("학교 이메일 인증을 먼저 완료해 주세요.");
-      return;
-    }
     if (!validateEmail(form.email)) {
-      nextErrors.email = "올바른 이메일 형식이 아니에요.";
+      nextErrors.email = "올바른 이메일 형식이 아닙니다.";
     }
     const campus = matchCampusByEmail(form.email);
     if (!campus) {
-      toast.error(`허용된 학교 이메일(${emailHint})을 다시 확인해 주세요.`);
+      toast.error(`사용 가능한 학교 이메일(${emailHint})인지 확인해주세요.`);
       return;
     }
     if (!validatePassword(form.password)) {
-      nextErrors.password = "비밀번호는 최소 8자 이상 입력해 주세요.";
+      nextErrors.password = "비밀번호는 최소 8자 이상 입력해주세요.";
     }
     if (form.password !== form.confirmPassword) {
-      nextErrors.confirmPassword = "비밀번호가 일치하지 않아요.";
+      nextErrors.confirmPassword = "비밀번호가 일치하지 않습니다.";
     }
     if (!form.nickname.trim()) {
-      nextErrors.nickname = "닉네임을 입력해 주세요.";
+      nextErrors.nickname = "닉네임을 입력해주세요.";
     }
 
     if (Object.keys(nextErrors).length > 0) {
@@ -226,17 +73,68 @@ export function SignupPage() {
       return;
     }
 
-    const user = {
-      id: Date.now().toString(),
+    const payload = {
       email: form.email,
-      nickname: form.nickname.trim(),
-      role: "user" as const,
-      campusId: campus.id,
+      password: form.password,
+      username: form.nickname.trim(),
     };
 
-    toast.success(`${campus.name} 학생으로 가입되었어요.`);
-    login(user);
-    navigate("/clubs");
+    setIsSubmitting(true);
+    try {
+      const response = await fetch(REGISTER_ENDPOINT, {
+        method: "POST",
+        headers: {
+          accept: "*/*",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const body = (await response.json().catch(() => null)) as {
+        status?: number;
+        data?: {
+          id?: string | number;
+          email?: string;
+          username?: string;
+          nickname?: string;
+          role?: "admin" | "user";
+          campusId?: string;
+        } | null;
+        message?: string;
+      } | null;
+
+      const isOk = response.ok && (body?.status ?? response.status) < 400;
+      if (!isOk || body?.data === null) {
+        const message =
+          body?.message ??
+          "회원가입에 실패했습니다. 잠시 후 다시 시도해주세요.";
+        toast.error(message);
+        return;
+      }
+
+      const registeredUser = body?.data ?? {};
+      const user = {
+        id: String(registeredUser.id ?? Date.now()),
+        email: registeredUser.email ?? form.email,
+        nickname:
+          registeredUser.username ??
+          registeredUser.nickname ??
+          form.nickname.trim(),
+        role: registeredUser.role === "admin" ? "admin" : ("user" as const),
+        campusId: registeredUser.campusId ?? campus.id,
+      };
+
+      toast.success(body?.message ?? `${campus.name} 학생으로 가입되었어요.`);
+      login(user);
+      navigate("/clubs");
+    } catch (error) {
+      console.error(error);
+      toast.error(
+        "회원가입 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요."
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleChange =
@@ -245,13 +143,6 @@ export function SignupPage() {
       const value = event.target.value;
       setForm((prev) => ({ ...prev, [field]: value }));
       setErrors((prev) => ({ ...prev, [field]: "" }));
-
-      if (field === "email") {
-        setIsVerified(false);
-        setIsCodeSent(false);
-        setTimeLeft(0);
-        clearStoredCode();
-      }
     };
 
   return (
@@ -271,94 +162,28 @@ export function SignupPage() {
             </div>
             <CardTitle className="text-2xl font-semibold">회원가입</CardTitle>
             <CardDescription>
-              학교 이메일 인증을 완료하고 나만의 캠퍼스 동아리 계정을 만들어
-              보세요.
+              학교 이메일을 입력하고 필요한 정보만 작성해 계정을 만들어 보세요.
+              (이메일 인증은 현재 비활성화되어 바로 가입됩니다.)
             </CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-5">
               <div className="space-y-2">
                 <Label htmlFor="email">학교 이메일</Label>
-                <div className="flex gap-2">
-                  <Input
-                    id="email"
-                    type="email"
-                    placeholder="ex) user@st.yc.ac.kr 또는 user@gnu.ac.kr"
-                    value={form.email}
-                    onChange={handleChange("email")}
-                  />
-                  <Button
-                    type="button"
-                    variant="outline"
-                    className="shrink-0"
-                    disabled={isSendingCode || timeLeft > 0}
-                    onClick={handleSendVerificationCode}
-                  >
-                    {isSendingCode ? "전송 중..." : "인증 코드"}
-                  </Button>
-                </div>
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="ex) user@st.yc.ac.kr 또는 user@gnu.ac.kr"
+                  value={form.email}
+                  onChange={handleChange("email")}
+                />
                 <p className="text-xs text-gray-500">
-                  사용 가능한 도메인: {emailHint}
+                  사용 가능한 이메일: {emailHint}
                 </p>
                 {errors.email && (
                   <p className="text-sm text-red-600">{errors.email}</p>
                 )}
-                {isCodeSent && !isVerified && (
-                  <p className="text-sm text-blue-600">
-                    인증번호가 메일로 발송되었어요.
-                  </p>
-                )}
-                {isVerified && (
-                  <p className="flex items-center gap-1 text-sm text-green-600">
-                    <CheckCircle className="h-4 w-4" />
-                    이메일 인증이 완료되었습니다.
-                  </p>
-                )}
               </div>
-
-              {isCodeSent && !isVerified && (
-                <motion.div
-                  initial={{ opacity: 0, y: -8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: 8 }}
-                  className="space-y-2 rounded-lg border border-dashed border-blue-200 p-4"
-                >
-                  <Label htmlFor="verificationCode">인증번호</Label>
-                  <div className="flex gap-2">
-                    <Input
-                      id="verificationCode"
-                      maxLength={6}
-                      value={form.verificationCode}
-                      onChange={handleChange("verificationCode")}
-                      placeholder="6자리 숫자를 입력해 주세요"
-                    />
-                    <Button
-                      type="button"
-                      variant="outline"
-                      onClick={handleVerifyCode}
-                      disabled={timeLeft === 0}
-                    >
-                      인증 확인
-                    </Button>
-                  </div>
-                  {errors.verificationCode && (
-                    <p className="text-sm text-red-600">
-                      {errors.verificationCode}
-                    </p>
-                  )}
-                  {timeLeft > 0 ? (
-                    <p className="flex items-center gap-1 text-sm text-gray-600">
-                      <Clock className="h-4 w-4" />
-                      남은 시간:{" "}
-                      {`${Math.floor(timeLeft / 60)}:${String(timeLeft % 60).padStart(2, "0")}`}
-                    </p>
-                  ) : (
-                    <p className="text-sm text-red-600">
-                      인증 시간이 만료됐어요. 다시 요청해 주세요.
-                    </p>
-                  )}
-                </motion.div>
-              )}
 
               <div className="space-y-2">
                 <Label htmlFor="nickname">닉네임</Label>
@@ -366,7 +191,7 @@ export function SignupPage() {
                   id="nickname"
                   value={form.nickname}
                   onChange={handleChange("nickname")}
-                  placeholder="닉네임을 입력해 주세요"
+                  placeholder="닉네임을 입력해주세요"
                 />
                 {errors.nickname && (
                   <p className="text-sm text-red-600">{errors.nickname}</p>
@@ -380,7 +205,7 @@ export function SignupPage() {
                   type="password"
                   value={form.password}
                   onChange={handleChange("password")}
-                  placeholder="8자 이상 입력해 주세요"
+                  placeholder="8자 이상 입력해주세요"
                 />
                 {errors.password && (
                   <p className="text-sm text-red-600">{errors.password}</p>
@@ -394,7 +219,7 @@ export function SignupPage() {
                   type="password"
                   value={form.confirmPassword}
                   onChange={handleChange("confirmPassword")}
-                  placeholder="비밀번호를 한 번 더 입력해 주세요"
+                  placeholder="비밀번호를 한 번 더 입력해주세요"
                 />
                 {errors.confirmPassword && (
                   <p className="text-sm text-red-600">
@@ -403,12 +228,12 @@ export function SignupPage() {
                 )}
               </div>
 
-              <Button type="submit" className="w-full">
-                회원가입
+              <Button type="submit" className="w-full" disabled={isSubmitting}>
+                {isSubmitting ? "가입 중..." : "회원가입"}
               </Button>
 
               <div className="text-center text-sm">
-                이미 계정이 있나요?{" "}
+                이미 계정이 있으신가요?{" "}
                 <Link to="/login" className="text-blue-600 hover:underline">
                   로그인
                 </Link>
