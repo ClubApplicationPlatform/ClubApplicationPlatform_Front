@@ -1,14 +1,18 @@
 import { type ReactNode, useMemo, useState } from "react";
 import { createPortal } from "react-dom";
 import { useNavigate, useParams } from "react-router-dom";
-import { ArrowLeft, Check, X } from "lucide-react";
+import { ArrowLeft, Check, MapPin, X } from "lucide-react";
 import { toast } from "sonner";
 
-import { mockApplications, mockClubs } from "../../lib/mockData";
+import { mockClubs } from "../../lib/mockData";
 import { useAuthStore } from "../../stores/authStore";
 import { Card, CardContent, CardHeader, CardTitle } from "../../ui/card";
 import { Button } from "../../ui/button";
 import { Badge } from "../../ui/badge";
+import {
+  findApplication,
+  upsertLocalApplication,
+} from "../../lib/applications";
 
 type ApplicationStatus =
   | "pending"
@@ -23,7 +27,7 @@ export function ApplicationDetailPage() {
   const user = useAuthStore((state) => state.user);
 
   const application = useMemo(
-    () => mockApplications.find((item) => item.id === applicationId),
+    () => (applicationId ? findApplication(applicationId) : undefined),
     [applicationId]
   );
   const club = application
@@ -47,16 +51,58 @@ export function ApplicationDetailPage() {
   };
 
   const confirmStatusChange = () => {
-    if (!pendingStatus) return;
-    const message =
-      pendingStatus === "accepted"
-        ? "최종 합격 처리되었습니다."
-        : pendingStatus === "document_passed"
-          ? "서류 합격 처리되었습니다."
-          : pendingStatus === "interview_scheduled"
-            ? "면접 일정이 확정되었습니다."
-            : "불합격 처리되었습니다.";
-    toast.success(message);
+    if (!pendingStatus || !application) {
+      closeConfirm();
+      return;
+    }
+
+    const patch: Partial<Application> = {
+      status: pendingStatus,
+    };
+
+    if (pendingStatus === "document_passed") {
+      patch.documentResult = {
+        status: "passed",
+        message: "서류 합격 처리되었습니다.",
+        decidedAt: new Date().toISOString().split("T")[0],
+      };
+    }
+
+    if (pendingStatus === "rejected") {
+      patch.result = {
+        status: "rejected",
+        message: "불합격 처리되었습니다.",
+        decidedAt: new Date().toISOString().split("T")[0],
+      };
+    }
+
+    if (pendingStatus === "accepted") {
+      patch.result = {
+        status: "accepted",
+        message:
+          "면접 결과 최종합격되었어요. 아래 버튼으로 오픈카카오톡에 들어가세요!",
+        decidedAt: new Date().toISOString().split("T")[0],
+        openChatLink: "https://open.kakao.com/o/join-us",
+      };
+    }
+
+    const updated = upsertLocalApplication(application, patch);
+    if (updated) {
+      const message =
+        pendingStatus === "accepted"
+          ? "최종 합격 처리되었습니다."
+          : pendingStatus === "document_passed"
+            ? "서류 합격 처리되었습니다."
+            : pendingStatus === "interview_scheduled"
+              ? "면접 일정이 확정되었습니다."
+              : "불합격 처리되었습니다.";
+      toast.success(message);
+      if (pendingStatus === "document_passed") {
+        navigate(`/clubs/${application.clubId}/manage`);
+        return;
+      }
+      setRefreshKey((prev) => prev + 1);
+    }
     closeConfirm();
   };
 
@@ -226,15 +272,39 @@ export function ApplicationDetailPage() {
                   면접 일정
                 </h3>
                 <p className="text-blue-800">{application.interviewSlot}</p>
+                {application.interviewLocation && (
+                  <p className="mt-2 flex items-center gap-2 text-sm text-blue-800">
+                    <MapPin className="h-4 w-4" />
+                    장소: {application.interviewLocation}
+                  </p>
+                )}
               </section>
             )}
 
-          {application.status === "accepted" && application.result && (
+          {application.status === "accepted" && (
             <section className="rounded-lg bg-green-50 p-4">
               <h3 className="mb-2 text-lg font-semibold text-green-900">
                 합격 안내
               </h3>
-              <p className="text-green-800">{application.result.message}</p>
+              <p className="text-green-800">
+                {application.result?.message ??
+                  "면접 결과 최종합격되었어요. 아래 버튼으로 오픈카카오톡에 들어가세요!"}
+              </p>
+              <div className="mt-3 text-sm text-blue-600">
+                오픈카카오톡 링크:{" "}
+                <a
+                  href={
+                    application.result?.openChatLink ??
+                    "https://open.kakao.com/o/join-us"
+                  }
+                  target="_blank"
+                  rel="noreferrer"
+                  className="underline"
+                >
+                  {application.result?.openChatLink ??
+                    "https://open.kakao.com/o/join-us"}
+                </a>
+              </div>
             </section>
           )}
 

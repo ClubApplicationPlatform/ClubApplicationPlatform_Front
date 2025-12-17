@@ -11,6 +11,11 @@ import ClubDetailPageSideBar from "../../components/club/ClubDetailPageSideBar";
 import ClubDetailPageHero from "../../components/club/ClubDetailPageHero";
 import { useAuthStore } from "../../stores/authStore";
 import { useActiveCampus } from "../../hooks/useActiveCampus";
+import {
+  getLocalWishlist,
+  toggleLocalWishlist,
+  LOCAL_WISHLISTS_EVENT,
+} from "../../lib/localWishlists";
 
 const LoadingState = () => (
   <div className="flex min-h-[40vh] flex-col items-center justify-center gap-3">
@@ -31,81 +36,33 @@ export function ClubDetailPage() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    let cancelled = false;
-    const fetchClub = async () => {
-      if (!clubId) {
-        setIsLoading(false);
-        return;
-      }
-      setIsLoading(true);
-      try {
-        const response = await fetch(
-          `https://clubapplicationplatform-server.onrender.com/api/clubs/${clubId}`,
-          { headers: { accept: "*/*" } }
-        );
-        const body = (await response.json().catch(() => null)) as
-          | {
-              clubId?: number | string;
-              name?: string;
-              shortDesc?: string;
-              description?: string;
-              type?: string;
-              department?: string;
-              category?: string;
-              recruitStatus?: string;
-              images?: string[];
-            }
-          | null;
+    setIsLoading(true);
+    if (!clubId) {
+      setClub(undefined);
+      setIsLoading(false);
+      return;
+    }
 
-        const ok = response.ok && body;
-        if (!ok || !body) {
-          throw new Error("Failed to load club");
-        }
+    setClub(mockClubs.find((c) => c.id === clubId));
+    setIsLoading(false);
+  }, [clubId]);
 
-        const isRecruiting =
-          (body.recruitStatus ?? "").toString().toLowerCase() === "open";
-        const mapped = {
-          id: String(body.clubId ?? clubId),
-          name: body.name ?? "이름 미정",
-          type:
-            body.type === "major" || body.type === "general"
-              ? (body.type as "major" | "general")
-              : ("general" as const),
-          category: body.category ?? "기타",
-          department: body.department ?? "미정",
-          adminId: "",
-          campusId: campus?.id ?? "yonam",
-          shortDescription: body.shortDesc ?? "소개가 준비 중입니다.",
-          description: body.description ?? "",
-          direction: "",
-          imageUrl: body.images?.[0] ?? "/fallback.png",
-          members: 0,
-          tags: [],
-          isRecruiting,
-          recruitDeadline: "",
-          notices: [],
-          activities: [],
-        };
-        if (!cancelled) {
-          setClub(mapped);
-        }
-      } catch (error) {
-        console.error("클럽 상세 불러오기 실패, mock 데이터 사용", error);
-        if (!cancelled) {
-          setClub(mockClubs.find((c) => c.id === clubId));
-        }
-      } finally {
-        if (!cancelled) {
-          setIsLoading(false);
-        }
-      }
-    };
-
-    fetchClub();
+  useEffect(() => {
+    if (!user || !club) {
+      setIsWishlisted(false);
+      return;
+    }
+    const refresh = () =>
+      setIsWishlisted(getLocalWishlist(user.id).includes(club.id));
+    refresh();
+    if (typeof window === "undefined") {
+      return;
+    }
+    window.addEventListener(LOCAL_WISHLISTS_EVENT, refresh);
     return () => {
-      cancelled = true;
+      window.removeEventListener(LOCAL_WISHLISTS_EVENT, refresh);
     };
-  }, [campus?.id, clubId]);
+  }, [user, club]);
 
   const resolvedClub = club;
 
@@ -152,9 +109,16 @@ export function ClubDetailPage() {
       navigate("/login");
       return;
     }
-    setIsWishlisted(!isWishlisted);
+    if (!resolvedClub) {
+      return;
+    }
+    const { isWishlisted: nextState } = toggleLocalWishlist(
+      user.id,
+      resolvedClub.id
+    );
+    setIsWishlisted(nextState);
     toast.success(
-      isWishlisted ? "찜목록에서 제거했어요." : "찜목록에 추가했어요."
+      nextState ? "찜목록에 추가했어요." : "찜목록에서 제거했어요."
     );
   };
 

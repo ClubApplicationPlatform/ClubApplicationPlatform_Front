@@ -1,28 +1,21 @@
-﻿import { Badge } from "../../ui/badge";
+﻿import type { Application } from "../../types/application";
+import { Badge } from "../../ui/badge";
 import { Button } from "../../ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "../../ui/card";
 
-export type ApplicationStatus =
-  | "pending"
-  | "document_passed"
-  | "interview_scheduled"
-  | "accepted"
-  | "rejected"
-  | (string & {});
+type ApplicationStatus = Application["status"];
 
-export interface ClubApplication {
-  id: string;
-  applicantName: string;
-  studentId: string;
-  department: string;
-  phone: string;
-  appliedAt: string;
-  status: ApplicationStatus;
+interface FilteredClubApplicationsTabProps {
+  statusFilter?: ApplicationStatus[];
 }
 
-interface ClubApplicationsTabProps {
-  applications: ClubApplication[];
+interface ClubApplicationsTabProps extends FilteredClubApplicationsTabProps {
+  applications: Application[];
   onSelectApplication: (applicationId: string) => void;
+  onQuickStatusChange?: (
+    applicationId: string,
+    status: ApplicationStatus
+  ) => void;
 }
 
 function getStatusBadge(status: ApplicationStatus) {
@@ -61,7 +54,14 @@ function getStatusBadge(status: ApplicationStatus) {
 export function ClubApplicationsTab({
   applications,
   onSelectApplication,
+  statusFilter,
+  onQuickStatusChange,
 }: ClubApplicationsTabProps) {
+  const displayedApplications = statusFilter
+    ? applications.filter((application) =>
+        statusFilter.includes(application.status)
+      )
+    : applications;
   return (
     <Card>
       <CardHeader>
@@ -72,7 +72,7 @@ export function ClubApplicationsTab({
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
-          {applications.map((application) => (
+          {displayedApplications.map((application) => (
             <div
               key={application.id}
               className="flex items-center justify-between rounded-lg border p-4 hover:bg-gray-50"
@@ -90,9 +90,33 @@ export function ClubApplicationsTab({
                 <p className="mt-1 text-sm text-gray-500">
                   지원일: {application.appliedAt}
                 </p>
+                {application.status === "interview_scheduled" &&
+                  onQuickStatusChange && (
+                    <div className="mt-3 grid w-full max-w-xs grid-cols-2 gap-2">
+                      <Button
+                        size="sm"
+                        className="w-full"
+                        onClick={() =>
+                          onQuickStatusChange(application.id, "accepted")
+                        }
+                      >
+                        면접 합격
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="w-full"
+                        onClick={() =>
+                          onQuickStatusChange(application.id, "rejected")
+                        }
+                      >
+                        불합격
+                      </Button>
+                    </div>
+                  )}
               </div>
               <Button
-                className=" hover:cursor-pointer"
+                className="hover:cursor-pointer"
                 onClick={() => onSelectApplication(application.id)}
               >
                 상세보기
@@ -100,7 +124,7 @@ export function ClubApplicationsTab({
             </div>
           ))}
 
-          {applications.length === 0 && (
+          {displayedApplications.length === 0 && (
             <div className="py-12 text-center text-gray-500">
               아직 지원자가 없습니다.
             </div>

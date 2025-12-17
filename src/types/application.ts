@@ -20,6 +20,7 @@ export interface ApplicationResult {
   status: "accepted" | "rejected";
   message: string;
   decidedAt: string;
+  openChatLink?: string;
 }
 
 export interface Application {
@@ -35,7 +36,7 @@ export interface Application {
   answers: ApplicationAnswer[];
   appliedAt: string;
   interviewSlot: string | null;
+  interviewLocation?: string | null;
   documentResult?: DocumentResult | null;
   result?: ApplicationResult | null;
 }
-

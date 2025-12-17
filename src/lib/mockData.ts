@@ -2,6 +2,7 @@
 import type { NotificationItem } from "../types/notification";
 import type { Notice } from "../types/notice";
 import type { InterviewSlot } from "../types/interview";
+import type { ClubQuestion } from "../types/question";
 
 export interface Club {
   activities: string[];
@@ -1192,147 +1193,9 @@ export const mockUserWishlists: UserWishlist[] = [
   },
 ];
 
-export const mockApplications: Application[] = [
-  {
-    id: "app-1",
-    clubId: "sg01",
-    clubName: "스마트그리드 연구회",
-    applicantId: "stu-2025001",
-    applicantName: "김하늘",
-    studentId: "20251234",
-    department: "전기전자공학과",
-    phone: "010-1111-2222",
-    status: "pending",
-    answers: [
-      {
-        question: "스마트그리드 로드맵 중 관심 있는 분야는 무엇인가요?",
-        answer:
-          "스마트 소비자 분야에서 수요 반응 제어를 연구하고 싶습니다. 에너지 데이터를 분석해 맞춤형 제어를 구현해 보고자 합니다.",
-      },
-    ],
-    appliedAt: "2025-11-05",
-    interviewSlot: null,
-    documentResult: {
-      status: "passed",
-      message: "서류 합격을 축하합니다! 인터뷰 가능한 일정을 선택해 주세요.",
-      decidedAt: "2025-11-09",
-    },
-  },
-  {
-    id: "app-2",
-    clubId: "iot01",
-    clubName: "IoT 연구회",
-    applicantId: "stu-2025002",
-    applicantName: "박서준",
-    studentId: "20252345",
-    department: "전기전자공학과",
-    phone: "010-3333-4444",
-    status: "accepted",
-    answers: [
-      {
-        question: "IoT 서비스를 구현하며 기대하는 역량은?",
-        answer:
-          "센서에서 수집한 데이터를 앱·클라우드까지 연동하는 풀스택 IoT 경험을 쌓고 싶습니다.",
-      },
-    ],
-    appliedAt: "2025-11-02",
-    interviewSlot: "2025-11-14 16:00",
-    result: {
-      status: "accepted",
-      message:
-        "최종 합격을 축하합니다! 11월 18일 오후 7시에 진행되는 오리엔테이션에 참석해주세요.",
-      decidedAt: "2025-11-08",
-    },
-  },
-  {
-    id: "app-3",
-    clubId: "triples01",
-    clubName: "TripleS",
-    applicantId: "stu-2025003",
-    applicantName: "이가은",
-    studentId: "20257890",
-    department: "스마트소프트웨어학과",
-    phone: "010-5555-6666",
-    status: "document_passed",
-    answers: [
-      {
-        question: "협업 프로젝트에서 맡고 싶은 역할은?",
-        answer:
-          "프론트엔드 리드 역할을 맡아 사용자 경험을 설계하고 싶습니다. 해커톤 경험을 공유하며 팀에 기여하겠습니다.",
-      },
-    ],
-    appliedAt: "2025-11-06",
-    interviewSlot: null,
-    documentResult: {
-      status: "passed",
-      message: "서류 합격입니다. 면접 가능 시간을 캘린더에 표시해 주세요.",
-      decidedAt: "2025-11-10",
-    },
-  },
-];
+export const mockApplications: Application[] = [];
 
-export const mockInterviewSlots: InterviewSlot[] = [
-  {
-    id: "slot-1",
-    clubId: "sg01",
-    date: "2025-11-15",
-    startTime: "14:00",
-    endTime: "14:30",
-    duration: 30,
-    capacity: 4,
-    currentCount: 3,
-  },
-  {
-    id: "slot-2",
-    clubId: "sg01",
-    date: "2025-11-15",
-    startTime: "15:00",
-    endTime: "15:30",
-    duration: 30,
-    capacity: 4,
-    currentCount: 2,
-  },
-  {
-    id: "slot-3",
-    clubId: "iot01",
-    date: "2025-11-14",
-    startTime: "16:00",
-    endTime: "16:30",
-    duration: 30,
-    capacity: 3,
-    currentCount: 1,
-  },
-  {
-    id: "slot-4",
-    clubId: "iot01",
-    date: "2025-11-14",
-    startTime: "17:00",
-    endTime: "17:30",
-    duration: 30,
-    capacity: 3,
-    currentCount: 0,
-  },
-  {
-    id: "slot-5",
-    clubId: "triples01",
-    date: "2025-11-18",
-    startTime: "19:00",
-    endTime: "19:30",
-    duration: 30,
-    capacity: 5,
-    currentCount: 4,
-  },
-  {
-    id: "slot-6",
-    clubId: "triples01",
-    date: "2025-11-18",
-    startTime: "20:00",
-    endTime: "20:30",
-    duration: 30,
-    capacity: 5,
-    currentCount: 2,
-  },
-];
+export const mockInterviewSlots: InterviewSlot[] = [];
 
 export const mockNotifications: NotificationItem[] = [
   {
@@ -1364,7 +1227,7 @@ export const mockNotifications: NotificationItem[] = [
   },
 ];
 
-export const mockQuestions = [
+export const mockQuestions: ClubQuestion[] = [
   {
     id: "q-1",
     clubId: "sg01",

@@ -12,10 +12,12 @@ interface InterviewSlotFormProps {
   startTime: string;
   duration: string;
   capacity: string;
+  location: string;
   onDateChange: (date: Date | undefined) => void;
   onStartTimeChange: (value: string) => void;
   onDurationChange: (value: string) => void;
   onCapacityChange: (value: string) => void;
+  onLocationChange: (value: string) => void;
   onSubmit: () => void;
 }
 
@@ -24,10 +26,12 @@ export function InterviewSlotForm({
   startTime,
   duration,
   capacity,
+  location,
   onDateChange,
   onStartTimeChange,
   onDurationChange,
   onCapacityChange,
+  onLocationChange,
   onSubmit,
 }: InterviewSlotFormProps) {
   return (
@@ -44,7 +48,7 @@ export function InterviewSlotForm({
               {date ? format(date, "PPP") : "날짜 선택"}
             </Button>
           </PopoverTrigger>
-          <PopoverContent className="w-auto p-0" align="start">
+          <PopoverContent className="w-[280px] p-0" align="start">
             <Calendar
               mode="single"
               selected={date}
@@ -66,7 +70,7 @@ export function InterviewSlotForm({
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="duration">예상 소요시간 (분)</Label>
+        <Label htmlFor="duration">면접 소요 시간 (분)</Label>
         <Input
           id="duration"
           type="number"
@@ -78,7 +82,7 @@ export function InterviewSlotForm({
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="capacity">최대 인원</Label>
+        <Label htmlFor="capacity">참여 가능 인원</Label>
         <Input
           id="capacity"
           type="number"
@@ -88,9 +92,20 @@ export function InterviewSlotForm({
         />
       </div>
 
+      <div className="space-y-2">
+        <Label htmlFor="location">면접 장소</Label>
+        <Input
+          id="location"
+          type="text"
+          value={location}
+          placeholder="ex) 3층 인재관 301호"
+          onChange={(event) => onLocationChange(event.target.value)}
+        />
+      </div>
+
       <Button onClick={onSubmit} className="w-full hover:cursor-pointer">
         <Plus className="mr-2 h-4 w-4" />
-        면접 시간 추가
+        면접 일정 등록
       </Button>
     </div>
   );

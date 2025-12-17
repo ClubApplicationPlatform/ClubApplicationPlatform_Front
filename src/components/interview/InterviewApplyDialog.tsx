@@ -8,11 +8,11 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "../../ui/alert-dialog";
-import { Clock, Calendar as CalendarIcon } from "lucide-react";
+import { Clock, Calendar as CalendarIcon, MapPin } from "lucide-react";
 
 interface InterviewApplyDialogProps {
   open: boolean;
-  slotInfo: { date: string; time: string } | null;
+  slotInfo: { date: string; time: string; location?: string } | null;
   onOpenChange: (open: boolean) => void;
   onConfirm: () => void;
   onCancel: () => void;
@@ -27,7 +27,7 @@ export function InterviewApplyDialog({
 }: InterviewApplyDialogProps) {
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
-      <AlertDialogContent>
+      <AlertDialogContent className="w-[min(80vw,480px)]">
         <AlertDialogHeader>
           <AlertDialogTitle>면접 일정 신청 확인</AlertDialogTitle>
           <AlertDialogDescription asChild>
@@ -44,6 +44,12 @@ export function InterviewApplyDialog({
                       <Clock className="h-4 w-4" />
                       <span className="font-medium">{slotInfo.time}</span>
                     </div>
+                    {slotInfo.location && (
+                      <div className="flex items-center gap-2 text-gray-900">
+                        <MapPin className="h-4 w-4" />
+                        <span className="font-medium">{slotInfo.location}</span>
+                      </div>
+                    )}
                   </div>
                 </div>
               )}

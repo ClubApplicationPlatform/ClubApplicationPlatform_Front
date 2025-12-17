@@ -1,10 +1,17 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowLeft, AlertCircle } from "lucide-react";
 import { toast } from "sonner";
 
+import type { Application, ApplicationAnswer } from "../../types/application";
+import type { ClubQuestion } from "../../types/question";
+import { addLocalApplication } from "../../lib/localApplications";
 import { mockClubs, mockQuestions } from "../../lib/mockData";
+import {
+  getLocalQuestionsForClub,
+  LOCAL_QUESTIONS_EVENT,
+} from "../../lib/localQuestions";
 import { useAuthStore } from "../../stores/authStore";
 import { useActiveCampus } from "../../hooks/useActiveCampus";
 import { Button } from "../../ui/button";
@@ -32,9 +39,17 @@ export function ApplyPage() {
   const campus = useActiveCampus();
 
   const club = mockClubs.find((entry) => entry.id === clubId);
-  const [questions, setQuestions] = useState(
-    mockQuestions.filter((question) => question.clubId === clubId)
+  const defaultQuestions = useMemo(
+    () => mockQuestions.filter((question) => question.clubId === clubId),
+    [clubId]
   );
+  const [questions, setQuestions] = useState<ClubQuestion[]>(() => {
+    if (!clubId) {
+      return [];
+    }
+    const stored = getLocalQuestionsForClub(clubId);
+    return stored.length ? stored : defaultQuestions;
+  });
 
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
@@ -48,6 +63,12 @@ export function ApplyPage() {
         return;
       }
       setIsLoading(true);
+      const storedBefore = getLocalQuestionsForClub(clubId);
+      if (storedBefore.length) {
+        setQuestions(storedBefore);
+      } else {
+        setQuestions(defaultQuestions);
+      }
       try {
         const response = await fetch(QUESTIONS_ENDPOINT(clubId), {
           headers: { accept: "*/*" },
@@ -75,14 +96,15 @@ export function ApplyPage() {
           }));
 
         if (!cancelled) {
-          setQuestions(mapped);
+          const storedAfter = getLocalQuestionsForClub(clubId);
+          if (storedAfter.length === 0) {
+            setQuestions(mapped);
+          }
         }
       } catch (error) {
         console.error("질문 불러오기 실패, mock 데이터 사용", error);
         if (!cancelled) {
-          setQuestions(
-            mockQuestions.filter((question) => question.clubId === clubId)
-          );
+          setQuestions(defaultQuestions);
         }
       } finally {
         if (!cancelled) {
@@ -95,6 +117,20 @@ export function ApplyPage() {
     return () => {
       cancelled = true;
     };
+  }, [clubId, defaultQuestions]);
+
+  useEffect(() => {
+    if (!clubId || typeof window === "undefined") {
+      return;
+    }
+    const handler = () => {
+      const stored = getLocalQuestionsForClub(clubId);
+      if (stored.length) {
+        setQuestions(stored);
+      }
+    };
+    window.addEventListener(LOCAL_QUESTIONS_EVENT, handler);
+    return () => window.removeEventListener(LOCAL_QUESTIONS_EVENT, handler);
   }, [clubId]);
 
   const handleAnswerChange = (questionId: string, value: string) => {
@@ -119,8 +155,40 @@ export function ApplyPage() {
   };
 
   const handleConfirmSubmit = () => {
+    if (!club || !user) {
+      setIsConfirmOpen(false);
+      navigate("/clubs");
+      return;
+    }
+
+    const answersPayload: ApplicationAnswer[] = questions.map((question) => ({
+      question: question.question,
+      answer: answers[question.id] ?? "",
+    }));
+
+    const applicationId =
+      typeof crypto !== "undefined" &&
+      typeof crypto.randomUUID === "function"
+        ? crypto.randomUUID()
+        : `${club.id}-${Date.now()}`;
+
+    const newApplication: Application = {
+      id: applicationId,
+      clubId: club.id,
+      clubName: club.name,
+      applicantId: user.id,
+      applicantName: user.nickname,
+      studentId: user.email.split("@")[0] ?? user.id,
+      department: club.department,
+      phone: "",
+      status: "pending",
+      answers: answersPayload,
+      appliedAt: new Date().toISOString().split("T")[0],
+      interviewSlot: null,
+    };
+
+    addLocalApplication(newApplication);
     setIsConfirmOpen(false);
-    // TODO: 서버 제출 API 연동 시 여기에 POST 추가
     navigate(clubId ? `/clubs/${clubId}/apply/success` : "/clubs");
   };
 

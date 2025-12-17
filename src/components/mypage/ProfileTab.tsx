@@ -76,7 +76,7 @@ export function ProfileTab({ user }: ProfileTabProps) {
             <Input
               id="studentId"
               type="text"
-              placeholder="20231234"
+              placeholder="22260035"
               value={formData.studentId}
               onChange={(event) =>
                 setFormData((prev) => ({
@@ -92,7 +92,7 @@ export function ProfileTab({ user }: ProfileTabProps) {
             <Input
               id="department"
               type="text"
-              placeholder="컴퓨터공학과"
+              placeholder="스마트소프트웨어학과"
               value={formData.department}
               onChange={(event) =>
                 setFormData((prev) => ({
@@ -108,7 +108,7 @@ export function ProfileTab({ user }: ProfileTabProps) {
             <Input
               id="phone"
               type="tel"
-              placeholder="010-1234-5678"
+              placeholder="010-4669-2902"
               value={formData.phone}
               onChange={(event) =>
                 setFormData((prev) => ({ ...prev, phone: event.target.value }))

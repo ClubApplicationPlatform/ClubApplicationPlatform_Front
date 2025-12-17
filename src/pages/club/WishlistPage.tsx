@@ -1,31 +1,54 @@
-﻿import { useNavigate } from "react-router-dom";
+import { useEffect, useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
 import { Card, CardContent } from "../../ui/card";
 import { Button } from "../../ui/button";
-import { getClubsForCampus, mockUserWishlists } from "../../lib/mockData";
+import { getClubsForCampus } from "../../lib/mockData";
+import {
+  getLocalWishlist,
+  toggleLocalWishlist,
+  LOCAL_WISHLISTS_EVENT,
+} from "../../lib/localWishlists";
 import { WishlistGrid } from "../../components/wishlist/WishlistGrid";
 import { WishlistEmptyState } from "../../components/wishlist/WishlistEmptyState";
 import { useAuthStore } from "../../stores/authStore";
 import { useActiveCampus } from "../../hooks/useActiveCampus";
-import { useMemo } from "react";
 
 export function WishlistPage() {
   const navigate = useNavigate();
   const user = useAuthStore((state) => state.user);
   const campus = useActiveCampus();
+
   const campusClubs = useMemo(
     () => getClubsForCampus(campus?.id ?? user?.campusId ?? null),
     [campus?.id, user?.campusId]
   );
 
-  const wishlistEntry = user
-    ? mockUserWishlists.find((entry) => entry.userId === user.id) ??
-      mockUserWishlists.find((entry) => entry.userId === "default_user")
-    : null;
-  const wishlistedClubs = wishlistEntry
-    ? campusClubs.filter((club) => wishlistEntry.clubIds.includes(club.id))
-    : [];
+  const [wishlistIds, setWishlistIds] = useState<string[]>(() =>
+    user ? getLocalWishlist(user.id) : []
+  );
+
+  useEffect(() => {
+    if (!user) {
+      setWishlistIds([]);
+      return;
+    }
+    const refresh = () => setWishlistIds(getLocalWishlist(user.id));
+    refresh();
+    if (typeof window === "undefined") {
+      return;
+    }
+    window.addEventListener(LOCAL_WISHLISTS_EVENT, refresh);
+    return () => {
+      window.removeEventListener(LOCAL_WISHLISTS_EVENT, refresh);
+    };
+  }, [user]);
+
+  const wishlistedClubs = useMemo(
+    () => campusClubs.filter((club) => wishlistIds.includes(club.id)),
+    [campusClubs, wishlistIds]
+  );
 
   if (!user) {
     return (
@@ -55,8 +78,17 @@ export function WishlistPage() {
   const handleViewClub = (clubId: string) => navigate(`/clubs/${clubId}`);
   const handleApplyClub = (clubId: string) =>
     navigate(`/clubs/${clubId}/apply`);
-  const handleToggleWishlist = () =>
-    toast.info("찜 기능은 곧 제공될 예정입니다.");
+  const handleToggleWishlist = (clubId: string) => {
+    if (!user) {
+      toast.error("로그인이 필요합니다.");
+      navigate("/login");
+      return;
+    }
+    const { isWishlisted } = toggleLocalWishlist(user.id, clubId);
+    toast.success(
+      isWishlisted ? "찜 목록에 추가했어요." : "찜 목록에서 제거했어요."
+    );
+  };
 
   return (
     <div className="container mx-auto max-w-6xl px-4 py-12">

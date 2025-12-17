@@ -1,7 +1,9 @@
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { ApplicationCard } from "../../components/application/ApplicationCard";
-import { mockApplications } from "../../lib/mockData";
+import { getApplicationsForUser } from "../../lib/applications";
+import { LOCAL_APPLICATIONS_EVENT } from "../../lib/localApplications";
 import { useAuthStore } from "../../stores/authStore";
 import { Button } from "../../ui/button";
 import { Card, CardContent } from "../../ui/card";
@@ -9,11 +11,25 @@ import { Card, CardContent } from "../../ui/card";
 export function MyApplicationsPage() {
   const navigate = useNavigate();
   const user = useAuthStore((state) => state.user);
-  const userApplications = user
-    ? mockApplications.filter(
-        (application) => application.applicantId === user.id
-      )
-    : [];
+  const [userApplications, setUserApplications] = useState(() =>
+    user ? getApplicationsForUser(user.id) : []
+  );
+
+  useEffect(() => {
+    if (!user) {
+      setUserApplications([]);
+      return;
+    }
+    const refresh = () => setUserApplications(getApplicationsForUser(user.id));
+    refresh();
+    if (typeof window === "undefined") {
+      return;
+    }
+    window.addEventListener(LOCAL_APPLICATIONS_EVENT, refresh);
+    return () => {
+      window.removeEventListener(LOCAL_APPLICATIONS_EVENT, refresh);
+    };
+  }, [user]);
 
   if (!user) {
     return (

@@ -1,4 +1,4 @@
-﻿import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Plus, Trash2, Edit2, GripVertical } from "lucide-react";
 import { toast } from "sonner";
 import type { DragEndEvent } from "@dnd-kit/core";
@@ -24,14 +24,12 @@ import { Button } from "../../ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "../../ui/card";
 import { Input } from "../../ui/input";
 import { Label } from "../../ui/label";
-
-export interface ClubQuestion {
-  id: string;
-  clubId: string;
-  question: string;
-  order: number;
-  maxLength: number;
-}
+import type { ClubQuestion } from "../../types/question";
+import {
+  getLocalQuestionsForClub,
+  saveLocalQuestionsForClub,
+  LOCAL_QUESTIONS_EVENT,
+} from "../../lib/localQuestions";
 
 interface ClubQuestionsTabProps {
   clubId: string;
@@ -42,9 +40,10 @@ export function ClubQuestionsTab({
   clubId,
   initialQuestions,
 }: ClubQuestionsTabProps) {
-  const [questionsList, setQuestionsList] = useState<ClubQuestion[]>(
-    () => initialQuestions ?? []
-  );
+  const [questionsList, setQuestionsList] = useState<ClubQuestion[]>(() => {
+    const stored = getLocalQuestionsForClub(clubId);
+    return stored.length ? stored : initialQuestions ?? [];
+  });
   const [newQuestion, setNewQuestion] = useState("");
   const [newQuestionMaxLength, setNewQuestionMaxLength] = useState("500");
 
@@ -53,6 +52,28 @@ export function ClubQuestionsTab({
   );
   const [editQuestionText, setEditQuestionText] = useState("");
   const [editQuestionMaxLength, setEditQuestionMaxLength] = useState("500");
+
+  useEffect(() => {
+    const stored = getLocalQuestionsForClub(clubId);
+    setQuestionsList(stored.length ? stored : initialQuestions ?? []);
+  }, [clubId, initialQuestions]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+    const handleStorage = () => {
+      const stored = getLocalQuestionsForClub(clubId);
+      setQuestionsList(stored.length ? stored : initialQuestions ?? []);
+    };
+    window.addEventListener(LOCAL_QUESTIONS_EVENT, handleStorage);
+    return () => window.removeEventListener(LOCAL_QUESTIONS_EVENT, handleStorage);
+  }, [clubId, initialQuestions]);
+
+  const persistQuestions = (next: ClubQuestion[]) => {
+    setQuestionsList(next);
+    saveLocalQuestionsForClub(clubId, next);
+  };
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -86,14 +107,14 @@ export function ClubQuestionsTab({
       maxLength: maxLen,
     };
 
-    setQuestionsList([...questionsList, newQuestionItem]);
+    persistQuestions([...questionsList, newQuestionItem]);
     toast.success("질문이 추가되었습니다.");
     setNewQuestion("");
     setNewQuestionMaxLength("500");
   };
 
   const handleDeleteQuestion = (questionId: string) => {
-    setQuestionsList(questionsList.filter((q) => q.id !== questionId));
+    persistQuestions(questionsList.filter((q) => q.id !== questionId));
     toast.success("질문이 삭제되었습니다.");
   };
 
@@ -124,18 +145,14 @@ export function ClubQuestionsTab({
       return;
     }
 
-    setQuestionsList((prev) =>
-      prev.map((q) =>
-        q.id === editingQuestion.id
-          ? { ...q, question: editQuestionText, maxLength: maxLen }
-          : q
-      )
+    const next = questionsList.map((q) =>
+      q.id === editingQuestion.id
+        ? { ...q, question: editQuestionText, maxLength: maxLen }
+        : q
     );
-
+    persistQuestions(next);
     toast.success("질문이 수정되었습니다.");
-    setEditingQuestion(null);
-    setEditQuestionText("");
-    setEditQuestionMaxLength("500");
+    handleCancelEditQuestion();
   };
 
   const handleCancelEditQuestion = () => {
@@ -152,7 +169,7 @@ export function ClubQuestionsTab({
       const newIndex = questionsList.findIndex((q) => q.id === over.id);
 
       const newQuestions = arrayMove(questionsList, oldIndex, newIndex);
-      setQuestionsList(newQuestions);
+      persistQuestions(newQuestions);
       toast.success("질문 순서가 변경되었습니다.");
     }
   };

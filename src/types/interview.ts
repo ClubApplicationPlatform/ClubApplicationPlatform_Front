@@ -7,5 +7,5 @@ export interface InterviewSlot {
   duration: number;
   capacity: number;
   currentCount: number;
+  location: string;
 }
-

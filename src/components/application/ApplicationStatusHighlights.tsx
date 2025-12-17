@@ -100,13 +100,17 @@ export function ApplicationStatusHighlights({
   }
 
   if (application.status === "interview_scheduled" && application.interviewSlot) {
+    const interviewLocation = application.interviewLocation;
+    const details = interviewLocation
+      ? `${application.interviewSlot} · ${interviewLocation}`
+      : application.interviewSlot;
     sections.push(
       <StatusSection
         key="interview"
         tone="blue"
         icon={Calendar}
         title="면접 일정"
-        message={application.interviewSlot}
+        message={details}
       />
     );
   }

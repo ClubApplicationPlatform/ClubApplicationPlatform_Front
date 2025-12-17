@@ -47,77 +47,17 @@ export function ClubListPage() {
   ];
 
   useEffect(() => {
-    let cancelled = false;
-    const fetchClubs = async () => {
-      setIsLoading(true);
-      try {
-        const response = await fetch(
-          "https://clubapplicationplatform-server.onrender.com/api/clubs",
-          {
-            headers: { accept: "*/*" },
-          }
-        );
-        const body = (await response.json().catch(() => null)) as
-          | {
-              clubId?: number | string;
-              name?: string;
-              shortDesc?: string;
-              type?: string;
-              category?: string;
-              department?: string;
-              recruitStatus?: string;
-            }[]
-          | null;
+    if (!campusId) {
+      setClubs([]);
+      setIsLoading(false);
+      return;
+    }
 
-        const ok = response.ok && Array.isArray(body);
-        if (!ok || !body) {
-          throw new Error("Failed to load clubs");
-        }
-
-        const mapped: Club[] = body.map((item, index) => {
-          const isRecruiting =
-            (item?.recruitStatus ?? "").toString().toLowerCase() === "open";
-          return {
-            id: String(item?.clubId ?? index),
-            name: item?.name ?? "이름 미정",
-            type: (item?.type as Club["type"]) ?? "general",
-            category: item?.category ?? "기타",
-            department: item?.department ?? "미정",
-            adminId: "",
-            campusId: campusId ?? "yonam",
-            shortDescription: item?.shortDesc ?? "소개가 준비 중입니다.",
-            description: "",
-            direction: "",
-            imageUrl: "/fallback.png",
-            members: 0,
-            tags: [],
-            isRecruiting,
-            recruitDeadline: "",
-            notices: [],
-            activities: [],
-          };
-        });
-
-        if (!cancelled) {
-          setClubs(mapped);
-        }
-      } catch (error) {
-        console.error("클럽 목록 불러오기 실패, mock 데이터 사용", error);
-        if (!cancelled) {
-          setClubs(getClubsForCampus(campusId));
-        }
-      } finally {
-        if (!cancelled) {
-          setIsLoading(false);
-        }
-      }
-    };
-
-    fetchClubs();
-    return () => {
-      cancelled = true;
-    };
+    setIsLoading(true);
+    setClubs(getClubsForCampus(campusId));
+    setIsLoading(false);
   }, [campusId]);
+
 
   const campusClubs = useMemo(() => clubs, [clubs]);
 

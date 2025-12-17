@@ -6,6 +6,7 @@ interface InterviewSlotListProps {
   isAdmin: boolean;
   selectedSlotId: string | null;
   onSelectSlot: (slot: InterviewSlot) => void;
+  onDeleteSlot?: (slotId: string) => void;
 }
 
 export function InterviewSlotList({
@@ -13,6 +14,7 @@ export function InterviewSlotList({
   isAdmin,
   selectedSlotId,
   onSelectSlot,
+  onDeleteSlot,
 }: InterviewSlotListProps) {
   if (slots.length === 0) {
     return (
@@ -42,9 +44,9 @@ export function InterviewSlotList({
           isSelected={selectedSlotId === slot.id}
           applyDisabled={selectedSlotId !== null}
           onSelect={onSelectSlot}
+          onDelete={isAdmin ? onDeleteSlot : undefined}
         />
       ))}
     </div>
   );
 }
-

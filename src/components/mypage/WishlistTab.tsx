@@ -10,9 +10,14 @@ import { ImageWithFallback } from "../common/ImageWithFallback";
 interface WishlistTabProps {
   clubs: Club[];
   onNavigate: NavigateFunction;
+  onToggleWishlist?: (clubId: string) => void;
 }
 
-export function WishlistTab({ clubs, onNavigate }: WishlistTabProps) {
+export function WishlistTab({
+  clubs,
+  onNavigate,
+  onToggleWishlist,
+}: WishlistTabProps) {
   if (clubs.length === 0) {
     return (
       <Card>
@@ -49,6 +54,10 @@ export function WishlistTab({ clubs, onNavigate }: WishlistTabProps) {
               variant="outline"
               className="absolute left-3 top-3 bg-white/90 hover:cursor-pointer"
               aria-label="찜 해제"
+              onClick={(event) => {
+                event.stopPropagation();
+                onToggleWishlist?.(club.id);
+              }}
             >
               <Heart className="h-4 w-4 fill-red-500 text-red-500" />
             </Button>

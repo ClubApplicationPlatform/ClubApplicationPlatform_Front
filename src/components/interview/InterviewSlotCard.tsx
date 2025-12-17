@@ -1,4 +1,10 @@
-import { Calendar as CalendarIcon, Clock, Users } from "lucide-react";
+import {
+  Calendar as CalendarIcon,
+  Clock,
+  MapPin,
+  Trash,
+  Users,
+} from "lucide-react";
 
 import type { InterviewSlot } from "../../types/interview";
 import { Badge } from "../../ui/badge";
@@ -10,6 +16,7 @@ interface InterviewSlotCardProps {
   isSelected: boolean;
   applyDisabled: boolean;
   onSelect?: (slot: InterviewSlot) => void;
+  onDelete?: (slotId: string) => void;
 }
 
 export function InterviewSlotCard({
@@ -18,6 +25,7 @@ export function InterviewSlotCard({
   isSelected,
   applyDisabled,
   onSelect,
+  onDelete,
 }: InterviewSlotCardProps) {
   const isFull = slot.currentCount >= slot.capacity;
 
@@ -36,7 +44,7 @@ export function InterviewSlotCard({
           variant={isFull ? "outline" : "default"}
           className={isFull ? "border-gray-400 text-gray-600" : "bg-green-600"}
         >
-          {isFull ? "마감" : "신청가능"}
+          {isFull ? "만료" : "신청 가능"}
         </Badge>
       </div>
 
@@ -48,9 +56,14 @@ export function InterviewSlotCard({
           </span>
         </div>
         <div className="flex items-center gap-2">
+          <MapPin className="h-4 w-4" />
+          <span>{slot.location}</span>
+        </div>
+        <div className="flex items-center gap-2">
           <Users className="h-4 w-4" />
           <span>
-            {slot.currentCount} / {slot.capacity}명 {isAdmin ? "신청" : ""}
+            {slot.currentCount} / {slot.capacity}명
+            {isAdmin ? " 참석" : ""}
           </span>
         </div>
       </div>
@@ -63,10 +76,23 @@ export function InterviewSlotCard({
           disabled={isFull || applyDisabled}
           onClick={() => onSelect?.(slot)}
         >
-          {isFull ? "마감됨" : isSelected ? "신청 완료" : "신청하기"}
+          {isFull ? "마감" : isSelected ? "신청 완료" : "신청하기"}
         </Button>
+      )}
+
+      {isAdmin && onDelete && (
+        <div className="mt-3 flex justify-end">
+          <Button
+            variant="ghost"
+            size="sm"
+            className="text-red-600 hover:bg-red-50"
+            onClick={() => onDelete(slot.id)}
+          >
+            <Trash className="mr-2 h-4 w-4" />
+            삭제
+          </Button>
+        </div>
       )}
     </div>
   );
 }
-

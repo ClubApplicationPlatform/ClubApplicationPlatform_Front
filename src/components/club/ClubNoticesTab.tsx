@@ -1,4 +1,4 @@
-﻿import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Plus, Edit2, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -9,13 +9,19 @@ import { Input } from "../../ui/input";
 import { Label } from "../../ui/label";
 import { Textarea } from "../../ui/textarea";
 import { Badge } from "../../ui/badge";
-import type { Notice } from "../../lib/mockData";
+import type { Notice } from "../../types/notice";
+import {
+  getLocalNoticesForClub,
+  saveLocalNoticesForClub,
+  LOCAL_NOTICES_EVENT,
+} from "../../lib/localNotices";
 
 interface ClubNoticesTabProps {
-  notices: Notice[];
+  clubId: string;
+  initialNotices: Notice[];
 }
 
-export function ClubNoticesTab({ notices }: ClubNoticesTabProps) {
+export function ClubNoticesTab({ clubId, initialNotices }: ClubNoticesTabProps) {
   const [noticeTitle, setNoticeTitle] = useState("");
   const [noticeContent, setNoticeContent] = useState("");
   const [isImportant, setIsImportant] = useState(false);
@@ -24,6 +30,36 @@ export function ClubNoticesTab({ notices }: ClubNoticesTabProps) {
   const [editNoticeTitle, setEditNoticeTitle] = useState("");
   const [editNoticeContent, setEditNoticeContent] = useState("");
   const [editNoticeImportant, setEditNoticeImportant] = useState(false);
+
+  const [notices, setNotices] = useState<Notice[]>(() => {
+    const stored = getLocalNoticesForClub(clubId);
+    return stored.length ? stored : initialNotices;
+  });
+
+  const displayedNotices = notices.length ? notices : initialNotices;
+
+  useEffect(() => {
+    if (getLocalNoticesForClub(clubId).length === 0) {
+      setNotices(initialNotices);
+    }
+  }, [clubId, initialNotices]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+    const handler = () => {
+      const stored = getLocalNoticesForClub(clubId);
+      setNotices(stored.length ? stored : initialNotices);
+    };
+    window.addEventListener(LOCAL_NOTICES_EVENT, handler);
+    return () => window.removeEventListener(LOCAL_NOTICES_EVENT, handler);
+  }, [clubId, initialNotices]);
+
+  const persistNotices = (nextNotices: Notice[]) => {
+    setNotices(nextNotices);
+    saveLocalNoticesForClub(clubId, nextNotices);
+  };
 
   const handleAddNotice = () => {
     if (!noticeTitle.trim()) {
@@ -35,6 +71,16 @@ export function ClubNoticesTab({ notices }: ClubNoticesTabProps) {
       return;
     }
 
+    const newNotice: Notice = {
+      id: `local-${Date.now()}`,
+      title: noticeTitle.trim(),
+      content: noticeContent.trim(),
+      date: new Date().toISOString().split("T")[0],
+      isImportant,
+    };
+
+    const next = [...displayedNotices, newNotice];
+    persistNotices(next);
     toast.success("공지사항이 등록되었습니다.");
     setNoticeTitle("");
     setNoticeContent("");
@@ -49,6 +95,9 @@ export function ClubNoticesTab({ notices }: ClubNoticesTabProps) {
   };
 
   const handleSaveEditNotice = () => {
+    if (!editingNotice) {
+      return;
+    }
     if (!editNoticeTitle.trim()) {
       toast.error("공지사항 제목을 입력해주세요.");
       return;
@@ -58,11 +107,19 @@ export function ClubNoticesTab({ notices }: ClubNoticesTabProps) {
       return;
     }
 
+    const next = displayedNotices.map((notice) =>
+      notice.id === editingNotice.id
+        ? {
+            ...notice,
+            title: editNoticeTitle.trim(),
+            content: editNoticeContent.trim(),
+            isImportant: editNoticeImportant,
+          }
+        : notice
+    );
+    persistNotices(next);
     toast.success("공지사항이 수정되었습니다.");
-    setEditingNotice(null);
-    setEditNoticeTitle("");
-    setEditNoticeContent("");
-    setEditNoticeImportant(false);
+    handleCancelEditNotice();
   };
 
   const handleCancelEditNotice = () => {
@@ -72,11 +129,10 @@ export function ClubNoticesTab({ notices }: ClubNoticesTabProps) {
     setEditNoticeImportant(false);
   };
 
-  const handleDeleteNotice = (_noticeId: string) => {
+  const handleDeleteNotice = (noticeId: string) => {
+    persistNotices(displayedNotices.filter((notice) => notice.id !== noticeId));
     toast.success("공지사항이 삭제되었습니다.");
   };
-
-  const hasNotices = notices && notices.length > 0;
 
   return (
     <Card>
@@ -86,9 +142,9 @@ export function ClubNoticesTab({ notices }: ClubNoticesTabProps) {
       <CardContent className="space-y-6">
         <div className="space-y-4">
           <h3>등록된 공지사항</h3>
-          {hasNotices ? (
+          {displayedNotices.length ? (
             <div className="space-y-3">
-              {notices.map((notice) => (
+              {displayedNotices.map((notice) => (
                 <div key={notice.id} className="rounded-lg border p-4">
                   {editingNotice?.id === notice.id ? (
                     <div className="space-y-4">
@@ -150,14 +206,14 @@ export function ClubNoticesTab({ notices }: ClubNoticesTabProps) {
                           <Button
                             variant="ghost"
                             size="icon"
-                            className=" hover:cursor-pointer"
+                            className="hover:cursor-pointer"
                             onClick={() => handleEditNotice(notice)}
                           >
                             <Edit2 className="h-4 w-4 text-blue-600" />
                           </Button>
                           <Button
                             variant="ghost"
-                            className=" hover:cursor-pointer"
+                            className="hover:cursor-pointer"
                             size="icon"
                             onClick={() => handleDeleteNotice(notice.id)}
                           >
@@ -207,7 +263,7 @@ export function ClubNoticesTab({ notices }: ClubNoticesTabProps) {
           <div className="flex items-center space-x-2">
             <Checkbox
               id="isImportant"
-              className=" hover:cursor-pointer"
+              className="hover:cursor-pointer"
               checked={isImportant}
               onCheckedChange={(checked) => setIsImportant(checked as boolean)}
             />
@@ -216,10 +272,7 @@ export function ClubNoticesTab({ notices }: ClubNoticesTabProps) {
             </Label>
           </div>
 
-          <Button
-            onClick={handleAddNotice}
-            className="w-full hover:cursor-pointer"
-          >
+          <Button onClick={handleAddNotice} className="w-full hover:cursor-pointer">
             <Plus className="mr-2 h-4 w-4" />
             공지사항 등록
           </Button>
